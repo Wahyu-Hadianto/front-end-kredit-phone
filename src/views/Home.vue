@@ -5,15 +5,26 @@
         <slideSale/>
         <NewProduct/>
     </section>
+    <section>
+      <div v-for="(product,index) in products" :key="index">
+        <div>
+          product name :  {{ product.product_name }}
+        
+          <div v-for="(color,index) in product.colors" :key="index">
+             color        : {{ color.color_name }}
+          </div>
+        </div>
+      </div>
+    </section>
   </div>
 </template>
 
 <script>
 // @ is an alias to /src
-import slideBanner from '@/components/SlideBanner.vue'
-import slideSale from '@/components/SlideSale.vue'
-import NewProduct from '@/components/NewProduct.vue'
-
+import slideBanner from '@/components/SlideBanner.vue';
+import slideSale from '@/components/SlideSale.vue';
+import NewProduct from '@/components/NewProduct.vue';
+import Axios from 'axios';
 export default {
   name: 'Home',
   data : function(){
@@ -23,9 +34,19 @@ export default {
           require('@/assets/static/slide-2.png'),
           require('@/assets/static/slide-3.png')
         
-        ]
+        ],
+        'products' : []
       
     }
+  },
+  mounted(){
+      Axios.get('/products')
+      .then(resp => {
+        this.products = resp.data.products
+      })
+      .catch(error => {
+        console.log(error);
+      })
   },
   components: {
       slideBanner,
