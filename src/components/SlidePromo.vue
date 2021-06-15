@@ -1,5 +1,6 @@
 <template>
     <div class="sale-container">
+        <!-- ========== CONTROL SLIDE =========== -->
         <section class="slide-header">
             <div><h3>Crazy Sale</h3></div>
             <div class="controls">
@@ -13,16 +14,17 @@
                 </span>
             </div>      
         </section>
+        <!-- =========== SLIDE WRAPPPER =============== -->
         <section class="slide-container" ref="slideContainer">
             <div class="wrapper" :style="styleWrapper">
-                <div class="item-slide" :style="styeObject">
+                <div class="item-slide" :style="styeObject" v-for="(product,index) in productsPromo" :key="index">
                     <div class="item-inner">
-                        <SaleItem/>
+                       <PromoItem :product="product"></PromoItem>
                     </div>
                 </div>
                 <div class="item-slide" :style="styeObject">
                     <div class="item-inner">
-                        item 2
+                        
                     </div>
                 </div>
                 <div class="item-slide" :style="styeObject">
@@ -69,10 +71,15 @@
     </div>
 </template>
 <script>
-import SaleItem from '@/components/SaleItem.vue'
+import PromoItem from '@/components/PromoItem.vue'
 export default {
     data : function(){
         return {
+            // ============= DATA PRODUCT ==============
+            // productsPromo : [],
+
+
+            // ============= DATA SLIDE ================
             containerWidth : 0,
             items : 4,
             margin : 10,
@@ -87,6 +94,10 @@ export default {
            
             }
         }
+    },
+    props : {productsPromo: Array},
+     components :  {
+        PromoItem
     },
     methods : {
         getWidthContainer : function(){
@@ -120,9 +131,7 @@ export default {
     mounted(){
         this.getWidthContainer();
     },
-    components :  {
-        SaleItem
-    }
+   
 }
 </script>
 <style lang="scss" scoped>
@@ -155,8 +164,10 @@ export default {
                  box-sizing: border-box;
                 text-align: center;
                 padding: 0 10px;
+                  
                 .item-inner{
                     background-color: rgb(255, 255, 255);
+                   
                 }
             }
         }

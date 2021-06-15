@@ -1,14 +1,17 @@
 <template>
   <div id="app">
-    <Navbar/>
+    <Navbar></Navbar>
     <router-view/>
+    <Footer></Footer>
   </div>
 </template>
 <script>
 import Navbar from '@/components/Navbar.vue'
+import Footer from '@/components/Footer.vue'
 export default {
     components : {
-      Navbar
+      Navbar,
+      Footer
     }
 }
 </script>
@@ -17,7 +20,7 @@ export default {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: rgba(206, 206, 206, 0.582);
+  background-color: rgba(221, 221, 221, 0.425);
   box-sizing: border-box;
 }
 #nav {

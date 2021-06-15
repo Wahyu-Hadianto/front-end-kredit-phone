@@ -28,7 +28,7 @@
             </div>
             <div class="on-desktop link-auth">
                 <router-link to="">Log In</router-link> |
-                <router-link to="">Register</router-link>
+                <router-link to="/register">Register</router-link>
             </div>
         </section>
         <section id="nav-mobile" v-if="!navStatus">

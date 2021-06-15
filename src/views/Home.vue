@@ -2,7 +2,7 @@
   <div class="home">
      <slideBanner></slideBanner>
     <section class="content">
-        <slideSale/>
+       <slidePromo :productsPromo="productsPromo"></slidePromo>
         <NewProduct/>
     </section>
     <section>
@@ -22,7 +22,7 @@
 <script>
 // @ is an alias to /src
 import slideBanner from '@/components/SlideBanner.vue';
-import slideSale from '@/components/SlideSale.vue';
+import slidePromo from '@/components/SlidePromo.vue';
 import NewProduct from '@/components/NewProduct.vue';
 import Axios from 'axios';
 export default {
@@ -35,7 +35,8 @@ export default {
           require('@/assets/static/slide-3.png')
         
         ],
-        'products' : []
+        'products' : [],
+        'productsPromo' : []
       
     }
   },
@@ -44,13 +45,16 @@ export default {
       .then(resp => {
         this.products = resp.data.products
       })
-      .catch(error => {
-        console.log(error);
-      })
+    //  get promo products
+    Axios.get('/products/promo')
+    .then(resp =>{
+      this.productsPromo = resp.data.products
+      console.log(this.productsPromo)
+    })
   },
   components: {
       slideBanner,
-      slideSale,
+      slidePromo,
       NewProduct
 
   }

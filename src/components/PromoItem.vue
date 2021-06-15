@@ -1,5 +1,7 @@
 <template>
-    <div class="sale-item-box">
+    <router-link :to="{name: 'Product',params : { slug : product.slug } }" class="link-product">
+    <div class="sale-item-box"
+    v-on:click="setCurrentPrice(product.slug,product.prices[0].id)">
         <section class="sale-countdown">
             <span class="days">7 Day</span>
             <span class="hours">07</span> :
@@ -7,38 +9,51 @@
             <span class="second">45</span>
         </section>
         <section class="sale-image">
-            <img :src="products.image" alt="" >
+            <img :src="product.colors[0].images[0].link" alt="" >
         </section>
         <section class="sale-text">
             <div class="name-product">
-                Realme C21
+                    {{ product.product_name }}
             </div>
             <div class="varian-product">
-                4GB+32GB
+                    {{ product.prices[0].ram_storage }}
             </div>
             <div class="price-product">
                 <div class="sale-price">
-                    Rp 1.799.000
+                    {{ product.prices[0].price_promo }}
                 </div>
                 <div class="normal-price">
-                    Rp .1.899.000
+                    {{ product.prices[0].price_normal }}
                 </div>
             </div>
         </section>
     </div>
+    </router-link>
 </template>
 <script>
 export default {
+    props : {product: Object},
     data : function(){
         return{
             products : 
                 {image: require('@/assets/produk/realme-c21-1.png')}
             
         }
+    },
+    methods : {
+        setCurrentPrice : function(key,value){
+          sessionStorage.setItem(key,value)
+            
+        }
     }
 }
 </script>
 <style scoped lang="scss">
+    .link-product{
+        display: block;
+        text-decoration: none;
+       
+    }
     .sale-item-box{
         padding: 10px 0;
         // ========= COUNTDOWN ======== //
