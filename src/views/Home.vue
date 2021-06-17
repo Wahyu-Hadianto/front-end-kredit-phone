@@ -40,6 +40,9 @@ export default {
       
     }
   },
+  beforeMount(){
+    this.$store.dispatch('loading',true)
+  },
   mounted(){
       Axios.get('/products')
       .then(resp => {
@@ -49,7 +52,10 @@ export default {
     Axios.get('/products/promo')
     .then(resp =>{
       this.productsPromo = resp.data.products
-      console.log(this.productsPromo)
+
+    })
+    .finally(()=>{
+      this.$store.dispatch('loading',false)
     })
   },
   components: {

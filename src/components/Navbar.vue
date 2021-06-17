@@ -1,63 +1,74 @@
 <template>
     <nav>
+        <!-- ======== NAV LEFT AREA ========= -->
         <section id="nav-left">
+            <!-- ========= TOGGLE NAV MOBILE =========== -->
             <div class="toggle-nav" v-on:click="navToggle">
                 <span></span>
                 <span></span>
                 <span></span>
             </div>
+            <!-- NAV TITLE -->
             <div class="app-title">
                     <h1 v-if="!navStatus"><span>Phone</span>Credit</h1>
             </div>
+            <!-- NAV LIST ITEM -->
             <div class="nav-list" :class="{active : navStatus}">
-                    <li v-for="(item, index) in navLeft" :key="index"><router-link :to="item.to" >{{ item.name }}</router-link></li> 
+                <router-link to="/" >Beranda</router-link>
+                <router-link to="/shop">Produk</router-link>
+                <router-link to="/about">Tentang Kami</router-link>
+                <router-link to="/kontak">Kontak Kami</router-link>
             </div>
         </section>
+        <!-- =========== NAV RIGHT AREA ================ -->
         <section id="nav-right">
+            <!-- seacrh mobile -->
             <div class="on-mobile">
                 <div class="toggle-search" v-on:click="searchToggle">
-                    <i class="fas fa-search" ></i>
+                <i class="fas fa-search" ></i>
             </div> 
             </div>
+            <!-- search desktop -->
             <div class="on-desktop search-box" :class="{ active : searchStatus}">
                 <div class="search-bar">
-                     <input type="search" name="" id="" placeholder="Search here!!">
+                     <input type="search" name="" id="" placeholder="Cari Disini!!">
                 <span><i class="fas fa-search"></i></span>
                 </div> 
-                <div class="search-bot"></div>
             </div>
+            <!-- ==== ROUTE AUTH === -->
             <div class="on-desktop link-auth">
-                <router-link to="">Log In</router-link> |
-                <router-link to="/register">Register</router-link>
-            </div>
-        </section>
-        <section id="nav-mobile" v-if="!navStatus">
-             <div>
-                 <router-link to="/"><i class="fas fa-home"></i></router-link> 
-            </div>
-           
-            <div>
-                <i class="fas fa-bell"></i>
-            </div>
-             <div>
-                 <i class="far fa-user"></i>
+                <!-- ===== JIKA USER LOGIN ======= -->
+                <div v-if="isLoggedIn">
+                   <div class="dropdown">
+                    <button class="btn btn-outline-light dropdown-toggle text-dark" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                       {{ user.name }}
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                        <li class="dropdown-item">Profile</li>
+                        <li class="dropdown-item" v-on:click="logout">Keluar</li>
+                    </ul>
+                    </div>
+                </div>
+                <!-- ======= JIKA USER BELUM LOGIN -========= -->
+                <div v-else>
+                    <router-link to="/login">Masuk</router-link> |
+                    <router-link to="/register">Daftar</router-link>
+                </div>
             </div>
         </section>
     </nav>
 </template>
 <script>
+import {mapGetters} from 'vuex'
 export default {
+    props : {
+        logout : Function
+    },
     data : ()=>{
         return {
-            navLeft : [
-                 {to : '/',name : 'Home'},
-                 {to : '/product', name : 'Shop'},
-                 {to : '/about', name: 'About'},
-                 {to : '/contact', name: 'Contact Us'}
-                 ],
             navStatus : false,
             searchStatus : false ,
-            searchBtn : ""
+            searchBtn : "",
         }
        
     },
@@ -69,62 +80,81 @@ export default {
             this.searchStatus = !this.searchStatus;
              let searchToggle =  document.querySelector(".toggle-search")
              searchToggle.innerHTML = this.searchStatus ? "<span>Batal</span>" : this.searchBtn ;
-        }
+        },
     },
     mounted(){
         let search = document.querySelector(".toggle-search");
         this.searchBtn = search.innerHTML;
-       
+    },
+    computed : {
+        ...mapGetters({user : 'user'}),
+        ...mapGetters({isLoggedIn : 'isLoggedIn'})
     }
+    
+         
+    
+         
+
+    
 }
 </script>
 <style lang="scss">
-
-    $appNameColor : rgb(44, 132, 233) ;
+    $navbackground : rgb(253, 253, 253);
+    $kp-blue : rgb(44, 132, 233) ;
+    $kp-blue-2 : rgba(44, 132, 233, 0.404) ;
     $navList : rgb(12, 12, 12);
     // Desktop View
-    #nav-mobile{
-        display: none;
-    }
+    .on-mobile{
+            display: none;
+        }
     nav {
+        position: fixed;
+        background-color: $navbackground;
         display: flex;
+        height: 55px;
         justify-content: space-between;
         width: 100%;
-
+          a{
+                letter-spacing: 1px;
+                text-decoration: none;
+                color: $kp-blue;
+                &.router-link-exact-active{
+                    border-bottom: 4px solid $kp-blue;
+                }
+                &:hover{
+                   border-bottom: 4px solid $kp-blue-2;
+                }
+            }
+        
     }
     #nav-left {
         display: flex;
-        width: 62%;
+        width: 60%;
         .app-title{
-        
             letter-spacing: 1.5pt;
             span{
-                color:  $appNameColor;
+                color:  $kp-blue;
             }
 
         }
         .nav-list{
             display: flex;
-            padding: 0px 20px;
-            width: 100%;  
+            width: 100%; 
+            align-self: center;
             justify-content: space-around;
-            align-items: center;
-            li{
-                list-style: none;
-            }
+          
         }
         
 
     }
     #nav-right {
         display: flex;
+        
         align-items: center;
         div{
             margin: 0px 10px;
         }
         .search-box .search-bar{
-            border: darkgrey 2px solid;
-            border-radius: 8px;
             background-color: rgb(255, 255, 255);
             padding: 0px 7px;
             input{
@@ -132,12 +162,66 @@ export default {
                 outline: none;
             }
         }
+        .link-auth{
+          .dropdown{
+              li{
+                  cursor: pointer;
+              }
+          }
+        }
       
     }
-
-
-    // MObile VIew 
-    @media (max-width: 575.98px) {
+    // DEKSTOP 
+    @media (max-width: 1199.98px) { 
+            .on-mobile{
+                display: block;
+            }
+           
+            .on-desktop.search-box{
+                display: none;
+            }
+             #nav-right{
+            
+            .on-desktop{
+                margin: 0;
+                &.search-box{
+                    display: none;
+                }
+                &.search-box.active{
+                    display: flex;
+                    position: fixed;
+                    padding: 10px 20px;
+                    height: 45px;
+                    top:55px;
+                    left: 0;
+                    right: 0;
+                    align-items:center;
+                    background-color: white;                   
+                    z-index: 99;
+                    input{
+                        background-color: rgb(255, 255, 255);
+                        min-width: 330px;
+                    }
+                }
+            }
+            .on-mobile{
+        
+                z-index: 111;
+            }
+            .profil{
+                z-index: 99;
+            }
+        }     
+    }
+    // =============== TABLET VIEW ===========================
+    @media (max-width: 991.98px) {
+        #nav-left{
+            width: 75%;
+        }
+       
+     }
+    // ======================== LANDSCAPE ======================
+    @media (max-width: 767.98px) { 
         // Transition 
         .fade-enter-active, .fade-leave-active {
         transition: opacity .5s;
@@ -163,20 +247,7 @@ export default {
                 opacity: 1;
             }
         }
-        // nav mobile bottom
-        #nav-mobile{
-            z-index: 2;
-            display: flex;
-            position: fixed;
-            bottom: 15px;
-            height: 40px;
-            width: 100%;
-            justify-content: space-evenly;
-            div{
-                font-size: xx-large;
-               
-            }
-        }
+       
         //menu nav list
         nav{
             height: 40px;
@@ -228,47 +299,13 @@ export default {
 
 
         }
-        #nav-right {
-            .on-desktop{
-                display: none;
-                margin: 0;
-                &.search-box.active{
-                    display: flex;
-                    position: fixed;
-                    padding: 10px 20px;
-                    height: 45px;
-                    top:0;
-                    left: 0;
-                    right: 0;
-                    align-items:center;
-                    background-color: white;                   
-                    z-index: 99;
-                    input{
-                        background-color: rgb(255, 255, 255);
-                        min-width: 330px;
-                    }
-                    .search-bot{
-                    margin: 0;
-                    display: block;
-                    position: fixed;
-                    bottom: 0;
-                    left: 0;
-                    right: 0;
-                    top: 45px;
-                    background-color: rgb(255, 255, 255);
-
-                            }
-                }
-
-            }
-            .on-mobile{
         
-                z-index: 111;
-            }
-            .profil{
-                z-index: 99;
-            }
-        }        
+    
+    }
+
+    // ======================== MObile VIew  ================
+    @media (max-width: 575.98px) {
+          
     }
 
 </style>
