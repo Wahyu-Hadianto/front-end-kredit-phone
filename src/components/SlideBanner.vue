@@ -11,10 +11,7 @@
             </span>
         <div class="wrapper" :style="{'marginLeft' : marginLeft + 'vw'}">
             <div class="item-slide" v-for="(slide, index) in slides" :key="index"
-               v-on:dragstart="dragstart"
-               v-on:drag="ondrag" 
-               ref="itemSlide"
-            >
+               ref="itemSlide">
                 <img :src="slide" alt="">
             </div>
         </div>
@@ -58,27 +55,7 @@ export default {
             }
            
         },
-        setSliderByIndex(){
-
-        },
-        cekIndex(){
-             console.log('index' + this.indexSlide)
-        },
-        dragstart(){
-            console.log('dragstart')
-        },
-        ondrag(event){
-            console.log('ondrag:' + event.pageX )
-        },
-        mousedown(){
-            console.log('mousedown')
-        },
-        mouseenter(){
-            console.log('mouseenter')
-        },
-        mouseup(){
-            console.log('mouseup')
-        }
+       
     }
 
     
@@ -109,7 +86,7 @@ export default {
           // ================ Navigasi SLider   ================== //
   
             .next-slide,.prev-slide{ 
-                background-color: rgba($color: #b6b6b6, $alpha: 0.4);
+                background-color: rgba($color: #b6b6b6, $alpha: 0.2);
                 font-size: 60px;
                 position: absolute;
                 padding: 5px 15px;
@@ -117,7 +94,7 @@ export default {
                 cursor: pointer;
                 &:hover{
                    transform: scale(1.2);
-                   background-color: rgba($color: #b6b6b6, $alpha: 0.9);
+                   background-color: rgba($color: #b6b6b6, $alpha: 0.3);
                 }
                
             }
@@ -126,5 +103,12 @@ export default {
                     right: 0;
                
             }
-    
+    // ================= MOBILE VIEW =========================
+    @media (max-width: 575.98px) { 
+         .next-slide,.prev-slide{
+             font-size: 40px;
+
+         }
+     }
+
 </style>

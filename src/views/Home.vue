@@ -68,7 +68,7 @@ export default {
 </script>
 <style scoped lang="scss">
      .content{
-       width: 90%;
+       
        margin: 0px auto;
      }
 </style>

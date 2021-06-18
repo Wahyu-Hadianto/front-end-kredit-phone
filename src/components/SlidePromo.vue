@@ -80,9 +80,14 @@ export default {
 
 
             // ============= DATA SLIDE ================
+            responsive : [
+                {width : 100,items :2},
+                {width : 575,items :3},
+                {width : 991,items :4}
+            ],
             containerWidth : 0,
-            items : 4,
-            margin : 10,
+            items : 0,
+            margin : 0,
             marginWrapper : 0,
             currentIndex : 0,
             itemSlideWidth : '',
@@ -100,6 +105,13 @@ export default {
         PromoItem
     },
     methods : {
+        setItems : function(){
+            for(let i = 0;i < this.responsive.length;i++){
+                if(window.innerWidth > this.responsive[i].width){
+                    this.items  = this.responsive[i].items
+                }
+            }
+        },
         getWidthContainer : function(){
             this.containerWidth = this.$refs.slideContainer.clientWidth 
             this.setItemWidth();
@@ -129,6 +141,7 @@ export default {
          
     },
     mounted(){
+        this.setItems();
         this.getWidthContainer();
     },
    
@@ -145,6 +158,8 @@ export default {
         .slide-header{
             margin: 40px 0;
             display: flex;
+            align-items: center;
+            padding-left: 20px;
             justify-content: space-between;
             .controls {
                 .prev-slide,.next-slide{
@@ -154,7 +169,7 @@ export default {
         }
         //=========== Slide COntainer =============//
         .slide-container{
-            width: 90vmax;
+            
             background-color: blue  ;
             overflow: hidden;
             .wrapper{
@@ -163,8 +178,7 @@ export default {
             .item-slide{
                  box-sizing: border-box;
                 text-align: center;
-                padding: 0 10px;
-                  
+                padding: 0 10px; 
                 .item-inner{
                     background-color: rgb(255, 255, 255);
                    
@@ -180,5 +194,13 @@ export default {
         border-radius: 15px;
         background-color: rgba($color: #a1a1a1, $alpha: 0.3);
     }
+    }
+    // ============= MOBILE VIEW =================
+    @media (max-width: 575.98px) {
+          .sale-container{
+              .slide-container{
+                  width: 100vw;
+              }
+          }
     }
 </style>

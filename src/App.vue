@@ -2,7 +2,9 @@
   <div id="app">
     <Loading></Loading>
     <Navbar :logout="logout"></Navbar>
-    <router-view/>
+    <div class="content">
+      <router-view/>
+    </div>
     <Footer></Footer>
   </div>
 </template>
@@ -48,7 +50,7 @@ export default {
       
 }
 </script>
-<style>
+<style lang="scss">
 
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
@@ -56,17 +58,10 @@ export default {
   -moz-osx-font-smoothing: grayscale;
   background-color: rgba(221, 221, 221, 0.425);
   box-sizing: border-box;
-}
-#nav {
-  padding: 30px;
-}
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
+  overflow-x: hidden;
+  .content{
+    margin-top: 60px;
+  }
 }
 
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
 </style>

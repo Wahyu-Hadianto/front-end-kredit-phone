@@ -14,12 +14,13 @@
           </section>
           <!-- ========== Product description ============= -->
           <section>
+              <!-- FORM HIDEN -->
+               <input type="hidden" v-model="form.product_id" :value="product.product_id">
               <!-- ========= PRODUCT NAME ============== -->
               <div class="product-title">
                 <div>
                     <h2>
                         <span> {{ product.product_name }}</span>
-                  <span>()</span>
                     </h2>
                 </div>
               </div>
@@ -57,6 +58,9 @@ export default {
                 {img : require('@/assets/static/spesifikasi/display.png')},
                 {img : require('@/assets/static/spesifikasi/storage.png')},
             ],
+            form : {
+
+            },
             curenntColor : 0
         }
     }  ,

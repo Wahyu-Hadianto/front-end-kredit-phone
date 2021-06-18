@@ -3,7 +3,7 @@
         <!-- ======== NAV LEFT AREA ========= -->
         <section id="nav-left">
             <!-- ========= TOGGLE NAV MOBILE =========== -->
-            <div class="toggle-nav" v-on:click="navToggle">
+            <div :class="['toggle-nav',{active : navStatus}]" v-on:click="navToggle">
                 <span></span>
                 <span></span>
                 <span></span>
@@ -13,20 +13,27 @@
                     <h1 v-if="!navStatus"><span>Phone</span>Credit</h1>
             </div>
             <!-- NAV LIST ITEM -->
-            <div class="nav-list" :class="{active : navStatus}">
+            <div class="nav-list" :class="{active : navStatus}" v-on:click="disableNav">
                 <router-link to="/" >Beranda</router-link>
-                <router-link to="/shop">Produk</router-link>
-                <router-link to="/about">Tentang Kami</router-link>
-                <router-link to="/kontak">Kontak Kami</router-link>
+                <router-link to="/shop" >Produk</router-link>
+                <router-link to="/about" >Tentang Kami</router-link>
+                <router-link to="/kontak" >Kontak Kami</router-link>
+                <div class="auth-mobile">
+                    <router-link to="/login">Masuk</router-link> |
+                    <router-link to="/register">Daftar</router-link>
+                </div>
             </div>
         </section>
         <!-- =========== NAV RIGHT AREA ================ -->
         <section id="nav-right">
             <!-- seacrh mobile -->
-            <div class="on-mobile">
+            <div class="on-mobile" v-if="!searchStatus">
                 <div class="toggle-search" v-on:click="searchToggle">
-                <i class="fas fa-search" ></i>
-            </div> 
+                    <i class="fas fa-search" ></i>
+                </div> 
+                <div class="me">
+                    <router-link to="/me" ><i class="far fa-user"></i></router-link>
+                </div>
             </div>
             <!-- search desktop -->
             <div class="on-desktop search-box" :class="{ active : searchStatus}">
@@ -34,6 +41,9 @@
                      <input type="search" name="" id="" placeholder="Cari Disini!!">
                 <span><i class="fas fa-search"></i></span>
                 </div> 
+                <div v-if="searchStatus">
+                    <button class="btn btn-light" type="button" v-on:click="searchToggle">Batal</button>
+                </div>
             </div>
             <!-- ==== ROUTE AUTH === -->
             <div class="on-desktop link-auth">
@@ -53,6 +63,7 @@
                 <div v-else>
                     <router-link to="/login">Masuk</router-link> |
                     <router-link to="/register">Daftar</router-link>
+                    
                 </div>
             </div>
         </section>
@@ -68,7 +79,7 @@ export default {
         return {
             navStatus : false,
             searchStatus : false ,
-            searchBtn : "",
+            
         }
        
     },
@@ -76,15 +87,13 @@ export default {
         navToggle : function(){
             this.navStatus = !this.navStatus
         },
+        disableNav : function(){
+            this.navStatus = false
+        },
         searchToggle : function(){
             this.searchStatus = !this.searchStatus;
-             let searchToggle =  document.querySelector(".toggle-search")
-             searchToggle.innerHTML = this.searchStatus ? "<span>Batal</span>" : this.searchBtn ;
+            
         },
-    },
-    mounted(){
-        let search = document.querySelector(".toggle-search");
-        this.searchBtn = search.innerHTML;
     },
     computed : {
         ...mapGetters({user : 'user'}),
@@ -109,9 +118,10 @@ export default {
         }
     nav {
         position: fixed;
+        height: 60px;
         background-color: $navbackground;
         display: flex;
-        height: 55px;
+        z-index: 999;
         justify-content: space-between;
         width: 100%;
           a{
@@ -131,6 +141,9 @@ export default {
         display: flex;
         width: 60%;
         .app-title{
+            display: flex;
+            padding: 0px 5px;
+            align-items: center;
             letter-spacing: 1.5pt;
             span{
                 color:  $kp-blue;
@@ -142,6 +155,9 @@ export default {
             width: 100%; 
             align-self: center;
             justify-content: space-around;
+            .auth-mobile{
+                display: none;
+            }
           
         }
         
@@ -149,10 +165,9 @@ export default {
     }
     #nav-right {
         display: flex;
-        
         align-items: center;
         div{
-            margin: 0px 10px;
+            padding: 0px 5px;
         }
         .search-box .search-bar{
             background-color: rgb(255, 255, 255);
@@ -174,11 +189,19 @@ export default {
     // DEKSTOP 
     @media (max-width: 1199.98px) { 
             .on-mobile{
-                display: block;
+                display: inline-flex;
+                font-size: x-large;
+                cursor: pointer;
+                a{
+                    color: black;
+                }
             }
            
             .on-desktop.search-box{
                 display: none;
+            }
+            #nav-left{
+                width: 65%;
             }
              #nav-right{
             
@@ -189,10 +212,10 @@ export default {
                 }
                 &.search-box.active{
                     display: flex;
-                    position: fixed;
+                    position: absolute;
                     padding: 10px 20px;
-                    height: 45px;
-                    top:55px;
+                    height: 50px;
+                    top:0;
                     left: 0;
                     right: 0;
                     align-items:center;
@@ -200,17 +223,11 @@ export default {
                     z-index: 99;
                     input{
                         background-color: rgb(255, 255, 255);
-                        min-width: 330px;
+                        width: 80vw;
                     }
                 }
             }
-            .on-mobile{
-        
-                z-index: 111;
-            }
-            .profil{
-                z-index: 99;
-            }
+    
         }     
     }
     // =============== TABLET VIEW ===========================
@@ -224,7 +241,7 @@ export default {
     @media (max-width: 767.98px) { 
         // Transition 
         .fade-enter-active, .fade-leave-active {
-        transition: opacity .5s;
+        transition: opacity .6s;
         }
         .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
         opacity: 0;
@@ -247,10 +264,8 @@ export default {
                 opacity: 1;
             }
         }
-       
-        //menu nav list
-        nav{
-            height: 40px;
+        #nav-left{
+            width: max-content;
         }
         .toggle-nav {
             display: flex;
@@ -263,6 +278,21 @@ export default {
                 background-color:$navList;
                 height: 4px;
                 width: 45px;
+                transition: all .5s ;
+                 transform-origin: left;
+            }
+            &.active{
+                span:nth-child(1){
+                   
+                    transform: rotate(40deg);
+                }
+                span:nth-child(2){
+                   opacity: 0;
+                }
+                span:nth-child(3){
+                   
+                    transform: rotate(-40deg);
+                }
             }
         }
         #nav-left{
@@ -270,23 +300,30 @@ export default {
                 flex-direction: column;
                 position: fixed;
                 top: 0px;
-                padding-top: 40px;
+                padding-top: 60px;
                 bottom: 0px;
                 display: none;
+                text-align: center;
                 animation: fade 400ms;
+                .auth-mobile{
+                    display: flex;
+                    align-items: center;
+                    font-size: x-large;
+                }
                 &.active{
                     display: flex;
                     background-color: white;
                     justify-content: flex-start;
+                    align-items: center;
                    
                 }
-                li{
+                a{
+                    width: max-content;
+                    text-align: center;
+                    font-size: x-large;
                     margin: 10px 0;
                     padding: 5px;
-                    width: 100%;
-                    text-align: center;
-                    
-                    box-shadow: 0px 6px 6px 0px rgba($color: #000000, $alpha: 0.3);
+                   
                 }
             }
             div{
@@ -299,13 +336,32 @@ export default {
 
 
         }
-        
+        #nav-right{
+            .on-desktop{
+                display: none;
+                &.search-box.active{
+                    padding: 0;
+                }
+            
+            }
+
+        }
     
     }
 
     // ======================== MObile VIew  ================
     @media (max-width: 575.98px) {
-          
+          #nav-right{
+            .on-desktop{
+                &.search-box.active{
+                    input{
+                        width: 75vw;
+                    }
+                }
+            
+            }
+
+        }
     }
 
 </style>

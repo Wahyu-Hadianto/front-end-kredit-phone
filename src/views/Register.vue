@@ -2,10 +2,8 @@
     <div id="register" class="justify-content-center">
       <div class="register-wrapper bg-light container">
          
-       <div class="header text-center">
-            <router-link to="/" >
-               <h1><span>Kredit</span>  Phone</h1>
-            </router-link>
+       <div class="header text-center mb-4">
+          <h2><span>SIGN UP</span></h2>  
        </div>
        <div class="form-area">
            
@@ -58,14 +56,14 @@
                 </div>
                 <div class="mb-3 text-center">
                     <button type="submit" class="btn btn-primary submit"
-                    v-on:click="register">Daftar</button>
+                    v-on:click="register">Sign Up <span><i class="fas fa-sign-in-alt"></i></span></button>
                 </div>
          
         </div>
         <!--  -->
         <div class="text-center">
-            <p>Sudah Memiliki Akun ?</p>
-            <router-link to="/login">Masuk</router-link>
+            <p>already have an account ?</p>
+            <router-link to="/login">Sign In</router-link>
         </div>
       </div>
     </div>
@@ -123,16 +121,20 @@ export default {
      $kp-blue : rgb(44, 132, 233) ;
     #register {
         padding: 40px 0;
-        background-color: rgb(230, 230, 230);
+        background-color: rgb(241, 240, 240);
         display: flex;
         .header{
-            
-            a{
-                text-decoration: none;
-                color: black;
-            }
+            background-color:rgb(253, 253, 253);
+            border-radius: 10px;
+            box-shadow: 0px 10px 6px -6px rgba($color: #8f8f8f5e, $alpha: 0.2);
+            width: 60%;
+            padding: 15px;
+            margin: 0px auto;
+            margin-top: -60px;
+
             span{
                 color: $kp-blue;
+                font-weight: 600;
             }
         }
         .register-wrapper{

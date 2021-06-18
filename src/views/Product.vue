@@ -8,15 +8,15 @@
               <div class="slide-image">
                 <div v-for="(color,index) in colors" :key="index">
                     <!-- image show -->
-                    <div v-if="index == currentColor"> 
+                    <div v-if="color.id == form.color_id"> 
                          <div class="image-show" v-for="(image,index) in color.images" :key="index">
                             <img :src="image.link" v-if="index == slideActive">
                         </div>
                     </div>
                     <!-- image thumbnail -->
-                  <div class="image-wrapper" v-if="index == currentColor">
+                  <div class="image-wrapper" v-if="color.id == form.color_id">
                       <div v-for="(image,index) in color.images" :key="index">
-                          <div class="image-tmb">
+                          <div :class="['image-tmb',{active : index == slideActive}]">
                                 <img :src="image.link">
                           </div>
                       </div>
@@ -26,8 +26,7 @@
           </section>
           <!-- ========== Product description ============= -->
           <section>
-              <form action="" method="post">
-                <input type="hidden" name="product_id" :value="product.product_id">
+                <input type="hidden" v-model="form.product_id" >
               <!-- ========= PRODUCT NAME ============== -->
               <div class="product-title">
                 <div>
@@ -40,7 +39,7 @@
               <section class="mb-4">
                    <div class="prices">
                   <div v-for="(prices,index) in product.prices" :key="index">
-                      <div v-if="prices.id == currentPrice" :class="['price-wrapper',{promo : prices.price_promo}]">
+                      <div v-if="prices.id == form.konfigurasi_id" :class="['price-wrapper',{promo : prices.price_promo}]">
                            <span v-if="prices.price_promo">
                                Rp {{ new Intl.NumberFormat('ID').format(prices.price_promo) }}
                             </span>
@@ -84,13 +83,12 @@
                 <h5>Konfigurasi :</h5>
                  <div v-for="(prices,index) in product.prices" 
                     :key="index"
-                    class="btn btn-outline-secondary col col-4 ram-storage m-2 active">
+                    :class="['btn','btn-select','col','col-4','ram-storage','m-2',{select : prices.id == form.konfigurasi_id}]">
                     <input type="radio" name="ram_storage" 
                     :value="prices.id" 
                     :id="'ram-storage-'+index" 
                     :data-price-id="prices.id"
-                    :checked="prices.id == currentPrice"
-                    v-on:change="setCurrentPrice"
+                   v-model="form.konfigurasi_id"
                     >
                     <label :for="'ram-storage-'+index">{{ prices.ram_storage }}</label>
             </div>
@@ -99,19 +97,19 @@
             <!-- ======= PRODUCT COLORS ============== -->
             <section class="row color-wrapper mb-4">
                 <h5>Warna :</h5>
-                <div class="color col col-4 btn btn-outline-dark m-2" v-for="(color,index) in colors" :key="index">
+                <div :class="['color','col','col-4','btn','btn-select','text-dark','m-2',{select : color.id == form.color_id}]" v-for="(color,index) in colors" :key="index">
                     <input type="radio" name="color" 
                     :id="'color-'+index" 
-                    :checked="index == currentColor"
-                    :data-index="index"
-                    v-on:change="changeCurrentColor">
+                    :value="color.id"
+                    v-model="form.color_id">
                     <label :for="'color-'+index">{{ color.color_name}}</label>
                 </div>
             </section>
+            <!-- ========= SELECT TENOR ============== -->
             <section class="mb-4">
-                <h5>Lama Membayar</h5>
-                <select name="" v-on:change="setPriceMonthly" class="form-select">
-                    <option selected disabled>Pilih Lama Membayar</option>
+                <h5>Jangka Waktu Angsuran</h5>
+                <select name="" v-on:change="setPriceMonthly" class="form-select" v-model="form.tenor">
+                    <option selected disabled value="0">Pilih Jangka Waktu</option>
                     <option value="3">3 Bulan</option>
                     <option value="6">6 Bulan</option>
                     <option value="9">9 Bulan</option>
@@ -124,7 +122,10 @@
                      Rp {{ new Intl.NumberFormat('ID').format(priceMonthly)}}
                 </p>
             </section>
-              </form>
+            <section class="submit">
+                <button type="button" class="btn btn-primary"
+                v-on:click="submit">Ajukan Cicilan</button>
+            </section>
           </section>
        </div>
     </div>
@@ -136,6 +137,13 @@ import Axios from 'axios';
 export default {
     data : function(){
         return{
+            // =========== form data ==============
+            form : {
+                product_id      : 0,
+                konfigurasi_id  : 0,
+                color_id        : 0,
+                tenor           : 0
+            },
             // =========== Data Product ============
             product : {},
             colors  : [],
@@ -149,44 +157,50 @@ export default {
                 storage    : require('@/assets/static/spesifikasi/storage.png')}
             ,
         // ============= Data Methods ==============
-         currentColor       : 0,
-         currentPrice     : 0,
          priceMonthly     : 0,
-         slideActive      : 0
+         slideActive      : 0,
+        
         }
     },
     methods : {
-        setCurrentPrice : function(event){
-            this.currentPrice = event.target.dataset.priceId
-
-        },
         startCurrentPrice : function(start){
             let sesiCurrent = sessionStorage.getItem(this.params)
-            console.log(sesiCurrent)
             if(sesiCurrent){
-                this.currentPrice = sesiCurrent
+                this.form.konfigurasi_id = parseInt(sesiCurrent) 
             }else{
-                this.currentPrice = start
+                this.form.konfigurasi_id = start
             }
-        },
-        changeCurrentColor : function(event){
-            this.currentColor = event.target.dataset.index
         },
         setPriceMonthly : function(event){
             let priceSelected = document.getElementById("price-selected").value;
             let monthly = event.target.value
             this.priceMonthly = Math.ceil(priceSelected / monthly) 
+        },
+        setDataProduct : function(data){
+            this.product = data.product
+            this.colors  = data.product.colors
+            this.spesifikasi = data.product.spesifikasi
+            this.form.product_id = data.product.product_id
+            this.form.color_id = data.product.colors[0].id
+            let start = data.product.prices[0].id 
+            this.startCurrentPrice(start)
+
+        },
+        submit : function(){
+            console.log(this.form)
         }
     },
+     beforeMount(){
+    this.$store.dispatch('loading',true)
+    },
     mounted(){
-        Axios.get('/product/'+this.params)
-        .then(resp => {
-            this.product     = resp.data.product
-            this.colors      = this.product.colors
-            this.spesifikasi = resp.data.product.spesifikasi
-            let start = resp.data.product.prices[0].id 
-            this.startCurrentPrice(start)
-        })
+            Axios.get('/product/'+ this.params)
+            .then(resp => {
+                this.setDataProduct(resp.data)
+            })
+            .finally(()=>{
+                this.$store.dispatch('loading',false)
+            })
     }
 }
 </script>
@@ -209,6 +223,10 @@ export default {
                 width: 80%;
                 .image-tmb {
                     width: 100%;
+                    &.active{
+                        border: 2px solid darkgray;
+                        border-radius: 10px;
+                    }
                     img {
                         width: 100%;
                     }
@@ -276,6 +294,18 @@ export default {
             font-size: xxx-large;
             padding: 0px 10px;
             color: red;
+        }
+        .btn-select{
+            border: 1px rgb(197, 196, 196) solid;
+            
+            :hover{
+                background-color: rgba(236, 235, 235, 0.527);
+                cursor: pointer;
+            }
+            &.select{
+                border: solid 2px rgb(119, 118, 118);
+
+            }
         }
     }
 </style>

@@ -1,10 +1,8 @@
 <template>
     <div id="login" class="justify-content-center">
         <div class="register-wrapper bg-light container">
-            <div class="header text-center">
-                    <router-link to="/" >
-                    <h1><span>Kredit</span> Phone</h1>
-                    </router-link>
+            <div class="header text-center mb-4">
+                    <h2><span>SIGN IN</span></h2>  
             </div>
             <div class="form-area">
                  <!-- =============  EMAIL ================= -->
@@ -33,12 +31,12 @@
                 </div>
                 <div class="mb-3 text-center">
                     <button type="submit" class="btn btn-primary submit"
-                    v-on:click="login">Masuk</button>
+                    v-on:click="login">Sign In <span><i class="fas fa-sign-in-alt"></i></span></button>
                 </div>
             </div>
             <div class="text-center">
-                <p>Belum Memiliki Akun</p>
-                <router-link to="/register">Daftar</router-link>
+                <p>don't have an account yet?</p>
+                <router-link to="/register">Sign Up</router-link>
             </div>
         </div>
     </div>
@@ -88,17 +86,22 @@ export default {
 <style lang="scss" scoped>
     $kp-blue : rgb(44, 132, 233) ;
      #login {
+         min-height: 600px;
         padding: 40px 0;
         background-color: rgb(230, 230, 230);
         display: flex;
          .header{
-            
-            a{
-                text-decoration: none;
-                color: black;
-            }
+           background-color:rgb(253, 253, 253);
+            border-radius: 10px;
+            box-shadow: 0px 10px 6px -6px rgba($color: #8f8f8f5e, $alpha: 0.2);
+            width: 60%;
+            padding: 15px;
+            margin: 0px auto;
+            margin-top: -60px;
+
             span{
                 color: $kp-blue;
+                font-weight: 600;
             }
         }
         .register-wrapper{
