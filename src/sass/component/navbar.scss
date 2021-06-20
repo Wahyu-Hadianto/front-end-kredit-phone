@@ -1,0 +1,265 @@
+@import '/src/sass/variable.scss';
+// Desktop View
+.on-mobile{
+        display: none;
+    }
+nav {
+    position: fixed;
+    height: 60px;
+    background-color: $navbackground;
+    display: flex;
+    z-index: 999;
+    justify-content: space-between;
+    width: 100%;
+      a{
+            letter-spacing: 1px;
+            text-decoration: none;
+            color: $kp-blue;
+            &.router-link-exact-active{
+                border-bottom: 4px solid $kp-blue;
+            }
+            &:hover{
+               border-bottom: 4px solid $kp-blue-2;
+            }
+        }
+    
+}
+#nav-left {
+    display: flex;
+    width: 60%;
+    .app-title{
+        display: flex;
+        padding: 0px 5px;
+        align-items: center;
+        letter-spacing: 1.5pt;
+        span{
+            color:  $kp-blue;
+        }
+
+    }
+    .nav-list{
+        display: flex;
+        width: 100%; 
+        align-self: center;
+        justify-content: space-around;
+        .auth-mobile{
+            display: none;
+        }
+      
+    }
+    
+
+}
+#nav-right {
+    display: flex;
+    align-items: center;
+    div{
+        padding: 0px 5px;
+    }
+    .search-box .search-bar{
+        background-color: rgb(255, 255, 255);
+        padding: 0px 7px;
+        input{
+            border: none;
+            outline: none;
+        }
+    }
+    .link-auth{
+      .dropdown{
+          li{
+              cursor: pointer;
+          }
+      }
+    }
+  
+}
+// DEKSTOP 
+@media (max-width: 1199.98px) { 
+        .on-mobile{
+            display: inline-flex;
+            font-size: x-large;
+            cursor: pointer;
+            a{
+                color: black;
+            }
+            .me{
+                display: none;
+            }
+        }
+       
+        .on-desktop.search-box{
+            display: none;
+        }
+        #nav-left{
+            width: 65%;
+        }
+         #nav-right{
+        
+        .on-desktop{
+            margin: 0;
+            &.search-box{
+                display: none;
+            }
+            &.search-box.active{
+                display: flex;
+                position: absolute;
+                padding: 10px 20px;
+                height: 50px;
+                top:0;
+                left: 0;
+                right: 0;
+                align-items:center;
+                background-color: white;                   
+                z-index: 99;
+                input{
+                    background-color: rgb(255, 255, 255);
+                    width: 80vw;
+                }
+            }
+        }
+
+    }     
+}
+// =============== TABLET VIEW ===========================
+@media (max-width: 991.98px) {
+    #nav-left{
+        width: 75%;
+    }
+   
+ }
+// ======================== LANDSCAPE ======================
+@media (max-width: 767.98px) { 
+    // Transition 
+    .fade-enter-active, .fade-leave-active {
+    transition: opacity .6s;
+    }
+    .fade-enter, .fade-leave-to /* .fade-leave-active below version 2.1.8 */ {
+    opacity: 0;
+    }
+    //animation
+    @keyframes fade {
+        0%{
+            opacity: 0;
+        }
+        25%{
+            opacity: 0.2;
+        }
+        50%{
+            opacity: 0.5;
+        }
+        75%{
+            opacity: 0.7;
+        }
+        100%{
+            opacity: 1;
+        }
+    }
+    #nav-left{
+        width: max-content;
+    }
+    .toggle-nav {
+        display: flex;
+        flex-direction: column;
+        padding: 3px 8px;
+        justify-content: space-evenly;
+        z-index: 88;
+        span{
+            display: block;
+            background-color:$navList;
+            height: 4px;
+            width: 45px;
+            transition: all .5s ;
+             transform-origin: left;
+        }
+        &.active{
+            span:nth-child(1){
+               
+                transform: rotate(40deg);
+            }
+            span:nth-child(2){
+               opacity: 0;
+            }
+            span:nth-child(3){
+               
+                transform: rotate(-40deg);
+            }
+        }
+    }
+    #nav-left{
+        .nav-list{
+            flex-direction: column;
+            position: fixed;
+            top: 0px;
+            padding-top: 60px;
+            bottom: 0px;
+            display: none;
+            text-align: center;
+            animation: fade 400ms;
+            .auth-mobile{
+                display: flex;
+                align-items: center;
+                font-size: x-large;
+            }
+            &.active{
+                display: flex;
+                background-color: white;
+                justify-content: flex-start;
+                align-items: center;
+               
+            }
+            a{
+                width: max-content;
+                text-align: center;
+                font-size: x-large;
+                margin: 10px 0;
+                padding: 5px;
+               
+            }
+        }
+        div{
+            display: flex;
+        }
+        .search-mobile{
+            z-index: 55;
+        }
+
+
+
+    }
+    #nav-right{
+        .on-desktop{
+            display: none;
+            &.search-box.active{
+                padding: 0;
+            }
+        
+        }
+        .on-mobile{
+            .me{
+                display: block;
+                margin: 0px 8px;
+                img{
+                    max-width: 35px;
+                    border-radius: 50%;
+                }
+            }
+        }
+
+    }
+
+}
+
+// ======================== MObile VIew  ================
+@media (max-width: 575.98px) {
+      #nav-right{
+        .on-desktop{
+            &.search-box.active{
+                input{
+                    width: 75vw;
+                }
+            }
+        
+        }
+
+    }
+}

@@ -2,27 +2,22 @@
 export default{
     state : function(){
         return {
-            token   : localStorage.getItem('token') || '',
-            user    : null,
-            isLogin : false
+            token   : localStorage.getItem('token') || null,
+            user    : { name :''},
         }
     },
     mutations : {
         user(state,user){
           state.user = user
         },
-        loggedIn(state){
-            state.isLogin = true
-        },
         loggedOut(state){
-            state.isLogin = false
             state.user    = null
             state.token   = ''
         }
     },
     getters : {
         isLoggedIn: state => {
-           return state.isLogin
+           return !!state.token
         } ,
         hasToken : state => {
             return state.token
@@ -37,14 +32,13 @@ export default{
     actions :{
         login({commit},user){
             commit('user',user)
-            commit('loggedIn')
+           
         },
         user({commit},user) {
             commit('user',user)
         },
         logout({commit}){
             commit('loggedOut')
-
         }
     }
 

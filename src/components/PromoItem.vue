@@ -3,10 +3,7 @@
     <div class="sale-item-box"
     v-on:click="setCurrentPrice(product.slug,product.prices[0].id)">
         <section class="sale-countdown">
-            <span class="days">7 Day</span>
-            <span class="hours">07</span> :
-            <span class="minute">24</span> :
-            <span class="second">45</span>
+            <component-countdown></component-countdown>
         </section>
         <section class="sale-image">
             <img :src="product.colors[0].images[0].link" alt="" >
@@ -20,10 +17,10 @@
             </div>
             <div class="price-product">
                 <div class="sale-price">
-                    {{ product.prices[0].price_promo }}
+                   Rp {{ new Intl.NumberFormat('ID').format(product.prices[0].price_promo)  }}
                 </div>
                 <div class="normal-price">
-                    {{ product.prices[0].price_normal }}
+                    {{ new Intl.NumberFormat('ID').format(product.prices[0].price_normal) }}
                 </div>
             </div>
         </section>
@@ -31,6 +28,7 @@
     </router-link>
 </template>
 <script>
+import componetCountdown from '@/components/component-countdown'
 export default {
     props : {product: Object},
     data : function(){
@@ -45,6 +43,9 @@ export default {
           sessionStorage.setItem(key,value)
             
         }
+    },
+    components : {
+        'component-countdown'   : componetCountdown
     }
 }
 </script>
@@ -52,22 +53,12 @@ export default {
     .link-product{
         display: block;
         text-decoration: none;
+        color: rgb(19, 18, 18);
        
     }
     .sale-item-box{
         padding: 10px 0;
         // ========= COUNTDOWN ======== //
-        .sale-countdown{
-            font-weight: 600;
-            color: red;
-            .hours,.minute,.second{
-                padding: 5px;
-                border-radius: 5px;
-                color: white;
-                background-color: red;
-                margin: 0px 5px;
-            }
-        }
         // =========== IMage ==============
         .sale-image{
            img {
@@ -84,9 +75,13 @@ export default {
                     align-items: center;
                 }
                 .sale-price{
-                    font-weight: 600;
+                    font-weight: 500;
                     font-size: large;
                     color: red;
+                }
+                .normal-price{
+                    font-size: small;
+                    text-decoration: line-through;
                 }
             }
         } 

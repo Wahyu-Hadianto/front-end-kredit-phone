@@ -1,0 +1,85 @@
+#new-product{
+    margin: 40px 0;
+    padding: 5%;
+    .product-inner{
+        &:hover{
+            transform: scale(1.01);
+        }
+    }
+    .new-product-wrapper{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        a{
+            text-decoration: none;
+        }
+        .product-item{
+            grid: 1;
+            display: flex;
+            color: rgb(32, 31, 31);
+            box-shadow: black 8px 6px 8px -10px;
+            background-color: white;
+            padding: 20px;
+            border-radius:10px ;
+            img{
+                width: 100%;
+            }
+        }
+        .product-text{
+            width: 50%;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-around;
+            .title{
+                font-size: x-large;
+            }
+            .price-promo{
+                display: flex;
+                flex-wrap: wrap;
+                p:nth-child(1){
+                    margin: 0;
+                }
+                p:nth-child(2){
+                    text-decoration: line-through;
+                    font-size: small;
+                }
+            }
+            .price{
+                color: red;
+                font-size: x-large;
+            }
+        }
+        .product-image {
+                width: 50%;
+            img{
+                width: 100%;
+            }
+        }
+    }
+   
+}
+// ================================
+@media (max-width: 1199.98px) { 
+     #new-product{
+      .new-product-wrapper{
+          .product-item{
+              .title{
+                  font-size: large;
+              }
+          }
+      }
+  }
+ }
+// ============= MOBILE LANDSCAPE ==============
+@media (max-width: 767.98px) { 
+    #new-product{
+        .new-product-wrapper{
+            grid-template-columns: 1fr;
+            .product-item{
+                img{
+                    width: 70%;
+                }
+            }
+        }
+    }
+}

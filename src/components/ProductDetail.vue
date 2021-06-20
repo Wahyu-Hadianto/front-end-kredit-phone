@@ -72,36 +72,5 @@ export default {
 }
 </script>
 <style scoped lang="scss">
-    #product-detail{
-        .product-wrapper{
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-        }
-        .image-wrapper {
-            .image {
-                img {
-                    width: 100%;
-                }
-            }
-        }
-        .price-wrapper{
-            background-color: rgba(247, 147, 147, 0.205);
-            padding: 10px;
-            span:nth-child(1){
-                color: red;
-                font-size: x-large;
-                font-weight: 500;
-            }
-            span:nth-child(2){
-                font-size: small;
-                color: rgb(58, 58, 58);
-                text-decoration: line-through;
-            }
-        }
-        .spesifikasi{
-            img {
-                max-width: 80px;
-            }
-        }
-    }
+   @import '../sass/component/product_detail.scss';
 </style>

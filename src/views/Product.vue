@@ -1,22 +1,23 @@
 <template>
-    <div id="product" class="container bg-light">
+    <div id="product" class="bg-light">
         <section>
              <div id="product-detail">
        <div class="product-wrapper">
         <!-- ======= Product IMage ============= -->
           <section>
-              <div class="slide-image">
+              <div class="slide-image" :style="styleContainer">
                 <div v-for="(color,index) in colors" :key="index">
                     <!-- image show -->
-                    <div v-if="color.id == form.color_id"> 
-                         <div class="image-show" v-for="(image,index) in color.images" :key="index">
-                            <img :src="image.link" v-if="index == slideActive">
+                    <div v-if="color.id == form.color_id" class="image-show-wrapper" :style="styleWrapper"> 
+                         <div class="image-show" v-for="(image,index) in color.images" :key="index">    
+                            <img :src="image.link" :style="styleContainer">
                         </div>
                     </div>
                     <!-- image thumbnail -->
                   <div class="image-wrapper" v-if="color.id == form.color_id">
                       <div v-for="(image,index) in color.images" :key="index">
-                          <div :class="['image-tmb',{active : index == slideActive}]">
+                          <div :class="['image-tmb',{active : index == slideActive}]"
+                                v-on:click="setSlider(index)">
                                 <img :src="image.link">
                           </div>
                       </div>
@@ -124,7 +125,7 @@
             </section>
             <section class="submit">
                 <button type="button" class="btn btn-primary"
-                v-on:click="submit">Ajukan Cicilan</button>
+                v-on:click="submit">Ajukan Cicilan <span><i class="fas fa-sign-in-alt"></i></span> </button>
             </section>
           </section>
        </div>
@@ -158,11 +159,41 @@ export default {
             ,
         // ============= Data Methods ==============
          priceMonthly     : 0,
-         slideActive      : 0,
-        
+         
+        //  ========== DATA SLIDER ===================
+        responsive : [
+            {width : 100,imgWidth : 400},
+            {width : 575,imgWidth : 500},
+            {width : 767,imgWidth : 350},
+            {width : 991,imgWidth : 500}
+        ],
+        styleContainer : {
+            width : ''
+        },
+        styleWrapper : {
+            marginLeft : ''
+        },
+        slideActive      : 0,
+        slideWidth       : 0
         }
     },
     methods : {
+        // ============= METHOD SLIDE IMAGE =========================
+       setContainerWidth(){
+           for(let i=0;i < this.responsive.length;i++){
+               if(window.innerWidth > this.responsive[i].width)
+                    this.slideWidth = this.responsive[i].imgWidth
+                 }
+                 this.styleContainer.width = this.slideWidth + 'px'
+        console.log(window.innerWidth)
+        console.log(this.slideWidth)
+        console.log(this.styleContainer.width)
+       },
+        setSlider(index){
+            this.styleWrapper.marginLeft = -(this.slideWidth * index) + 'px' ;
+            this.slideActive =  index;
+        },
+        // =====================
         startCurrentPrice : function(start){
             let sesiCurrent = sessionStorage.getItem(this.params)
             if(sesiCurrent){
@@ -192,8 +223,11 @@ export default {
     },
      beforeMount(){
     this.$store.dispatch('loading',true)
+     // ========== Setup Slide Container Width ============
+            this.setContainerWidth();
     },
     mounted(){
+        // ========== REQUEST PRODUUCT ==========
             Axios.get('/product/'+ this.params)
             .then(resp => {
                 this.setDataProduct(resp.data)
@@ -201,21 +235,41 @@ export default {
             .finally(()=>{
                 this.$store.dispatch('loading',false)
             })
+           
     }
 }
 </script>
 <style scoped lang="scss">
+   
       #product-detail{
+          padding: 0px 5%;
         .product-wrapper{
             display: grid;
             grid-template-columns: 1fr 1fr;
+            .submit{
+                width: 100%;
+                text-align: center;
+                font-size: x-large;
+                button{
+                    width: 80%;
+                   
+                }
+            }
+        
         }
         .slide-image {
             text-align: center;
+            margin: 0px auto;
+            overflow-x: hidden;
+            .image-show-wrapper{
+                display: inline-flex;
+                transition: all .5s ease-out;
+            }
             .image-show{
-                
+               
                 img{
-                    width: 80%;
+                    cursor: pointer;
+                    
                 }
             }
             .image-wrapper{
@@ -225,9 +279,10 @@ export default {
                     width: 100%;
                     &.active{
                         border: 2px solid darkgray;
-                        border-radius: 10px;
+                        border-radius: 5px;
                     }
                     img {
+                        cursor: pointer;
                         width: 100%;
                     }
                 }
@@ -306,6 +361,26 @@ export default {
                 border: solid 2px rgb(119, 118, 118);
 
             }
+        }
+    }
+     // ============== MOBILE LANDSCAPE ====================
+        @media (max-width: 767.98px) { 
+            #product-detail{
+                 .product-wrapper{
+                grid-template-columns: 1fr;
+                    section:nth-child(1){
+                        margin-bottom: 40px;
+                    }
+                }
+                .btn-select{
+                   
+                }
+            }
+         }
+    // ================= MOBILE POTRAIT =======================
+    @media (max-width: 575.98px) { 
+        #product-detail{
+            
         }
     }
 </style>

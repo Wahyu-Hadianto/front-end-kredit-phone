@@ -20,21 +20,21 @@ export default {
       Footer,
       Loading
     },
-    created(){
-      // ============ Jika Ada Token =========
+    beforeCreate(){
+       // ============ Jika Ada Token =========
       if(this.$store.getters.hasToken){
             Axios.get('/user').
             then(response => {
               if(response.status == 200){
-              this.$store.dispatch('login',response.data)
+              this.$store.dispatch('login',response.data.user)
             }
           })
-          .finally(()=>{
-              this.$store.commit.loggedin
-          })
       }
+      
+    },
+    mounted(){
      
-     
+      
     },
   
     methods : {
@@ -44,6 +44,7 @@ export default {
           localStorage.removeItem('token')
           this.$store.dispatch('logout')
           this.$router.push('/')
+          console.log(this.$store.getters.isLoggedIn)
         }
       }
     }
@@ -51,12 +52,13 @@ export default {
 }
 </script>
 <style lang="scss">
-
+@import './sass/variable.scss';
+$bg : rgba(236, 232, 232, 0.678);
 #app {
   font-family: Avenir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background-color: rgba(221, 221, 221, 0.425);
+  background-color: $gray-100;
   box-sizing: border-box;
   overflow-x: hidden;
   .content{

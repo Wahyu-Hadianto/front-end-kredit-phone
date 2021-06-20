@@ -122,7 +122,6 @@ export default {
         nextSlide(){
             this.marginWrapper -= this.containerWidth 
             this.currentIndex += 1;
-            console.log(this.currentIndex)
             this.startSlider();
         },
         prevSlide(){
@@ -148,59 +147,5 @@ export default {
 }
 </script>
 <style lang="scss" scoped>
-    *{
-        padding: 0;
-        margin: 0;
-       
-    }
-    .sale-container{   
-        //=========== HEADER SLIDE =============//
-        .slide-header{
-            margin: 40px 0;
-            display: flex;
-            align-items: center;
-            padding-left: 20px;
-            justify-content: space-between;
-            .controls {
-                .prev-slide,.next-slide{
-                    margin: 0 20px;
-                }
-            }
-        }
-        //=========== Slide COntainer =============//
-        .slide-container{
-            
-            background-color: blue  ;
-            overflow: hidden;
-            .wrapper{
-            display: inline-flex;
-            transition: all 1s  ease-in-out;
-            .item-slide{
-                 box-sizing: border-box;
-                text-align: center;
-                padding: 0 10px; 
-                .item-inner{
-                    background-color: rgb(255, 255, 255);
-                   
-                }
-            }
-        }
-        }
-    // ========= control slide ======== //
-    .prev-slide,.next-slide{
-        padding:10px 15px;
-        font-size: 40px;
-        cursor: pointer;
-        border-radius: 15px;
-        background-color: rgba($color: #a1a1a1, $alpha: 0.3);
-    }
-    }
-    // ============= MOBILE VIEW =================
-    @media (max-width: 575.98px) {
-          .sale-container{
-              .slide-container{
-                  width: 100vw;
-              }
-          }
-    }
+   @import '../sass/component/slide_promo.scss';
 </style>

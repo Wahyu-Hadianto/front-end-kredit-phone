@@ -63,52 +63,5 @@ export default {
 }
 </script>
 <style scoped lang="scss">
-        .slide-banner{ 
-            display: flex;
-            align-items: center;
-            overflow: hidden;
-            // =======  Image slider ==============//
-            .wrapper{
-                transition: margin-left  1000ms ease-in-out;
-                display: inline-flex;
-                cursor: grab;
-                .item-slide{
-                    cursor: grab;
-                    width: 100vw;
-                    img{
-                        cursor: grab;
-                        width: 100%;
-                    }
-                }
-            }  
-
-        }
-          // ================ Navigasi SLider   ================== //
-  
-            .next-slide,.prev-slide{ 
-                background-color: rgba($color: #b6b6b6, $alpha: 0.2);
-                font-size: 60px;
-                position: absolute;
-                padding: 5px 15px;
-                border-radius: 15px;
-                cursor: pointer;
-                &:hover{
-                   transform: scale(1.2);
-                   background-color: rgba($color: #b6b6b6, $alpha: 0.3);
-                }
-               
-            }
-            
-            .next-slide{ 
-                    right: 0;
-               
-            }
-    // ================= MOBILE VIEW =========================
-    @media (max-width: 575.98px) { 
-         .next-slide,.prev-slide{
-             font-size: 40px;
-
-         }
-     }
-
+@import '../sass/component/slide_banner.scss';
 </style>

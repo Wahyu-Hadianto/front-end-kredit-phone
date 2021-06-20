@@ -1,0 +1,42 @@
+#footer{
+    min-height: 250px;
+    padding: 30px ;
+    li{
+        list-style: none;
+        font-size: small;
+    }
+    .telepon{
+        font-size: x-large;
+        font-weight: 500;
+    }
+    .sosmed{
+        display: flex;
+        li{
+            font-size: x-large;
+            margin: 5px 10px;
+        }
+    }
+}
+// =============== MObile Landscape =================
+
+@media (max-width: 767.98px) { 
+    #footer{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 20px;
+        .col {
+            width: 100%;
+        }
+    }
+}
+// ============= MOBILE POTRAIT =====================
+@media (max-width: 575.98px) { 
+     #footer{
+        display: grid;
+        grid-template-columns: 1fr ;
+        gap: 20px;
+        .col{
+            width: 100%;
+        }
+    }
+ }

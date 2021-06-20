@@ -1,0 +1,33 @@
+@import '/src/sass/variable.scss';
+#product-detail{
+    .product-wrapper{
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+    }
+    .image-wrapper {
+        .image {
+            img {
+                width: 100%;
+            }
+        }
+    }
+    .price-wrapper{
+        background-color: $green-200;
+        padding: 10px;
+        span:nth-child(1){
+            color: red;
+            font-size: x-large;
+            font-weight: 500;
+        }
+        span:nth-child(2){
+            font-size: small;
+            color: $gray-800;
+            text-decoration: line-through;
+        }
+    }
+    .spesifikasi{
+        img {
+            max-width: 80px;
+        }
+    }
+}

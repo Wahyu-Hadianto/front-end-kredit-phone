@@ -6,15 +6,6 @@
         <NewProduct/>
     </section>
     <section>
-      <div v-for="(product,index) in products" :key="index">
-        <div>
-          product name :  {{ product.product_name }}
-        
-          <div v-for="(color,index) in product.colors" :key="index">
-             color        : {{ color.color_name }}
-          </div>
-        </div>
-      </div>
     </section>
   </div>
 </template>
@@ -40,14 +31,12 @@ export default {
       
     }
   },
+  methods : {
+  },
   beforeMount(){
     this.$store.dispatch('loading',true)
   },
   mounted(){
-      Axios.get('/products')
-      .then(resp => {
-        this.products = resp.data.products
-      })
     //  get promo products
     Axios.get('/products/promo')
     .then(resp =>{
