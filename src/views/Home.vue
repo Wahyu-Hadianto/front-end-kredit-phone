@@ -41,7 +41,6 @@ export default {
     Axios.get('/products/promo')
     .then(resp =>{
       this.productsPromo = resp.data.products
-
     })
     .finally(()=>{
       this.$store.dispatch('loading',false)

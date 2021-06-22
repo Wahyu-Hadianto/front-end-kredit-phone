@@ -1,0 +1,146 @@
+@import '../variable.scss';
+      #product-detail{
+        padding: 0px 5%;
+      .product-wrapper{
+          display: grid;
+          grid-template-columns: 1fr 1fr;
+          .submit{
+              width: 100%;
+              text-align: center;
+              font-size: x-large;
+              button{
+                  width: 80%;
+                 
+              }
+          }
+      
+      }
+      .slide-image {
+          text-align: center;
+          margin: 0px auto;
+          overflow-x: hidden;
+          .image-show-wrapper{
+              display: inline-flex;
+              transition: all .5s ease-out;
+          }
+          .image-show{
+             
+              img{
+                  cursor: pointer;
+                  
+              }
+          }
+          .image-wrapper{
+              display: inline-flex;
+              width: 80%;
+              .image-tmb {
+                  width: 100%;
+                  &.active{
+                      border: 2px solid darkgray;
+                      border-radius: 5px;
+                  }
+                  img {
+                      cursor: pointer;
+                      width: 100%;
+                  }
+              }
+          }
+      }
+     
+      .price-wrapper{
+          font-size: x-large;
+          font-weight: 500;
+      }
+      .price-wrapper.promo{
+          background-color: rgba(247, 147, 147, 0.205);
+          padding: 10px;
+          span:nth-child(1){
+              color: red;
+              font-size: x-large;
+              font-weight: 500;
+          }
+          span:nth-child(2){
+              font-size: small;
+              color: rgb(58, 58, 58);
+              text-decoration: line-through;
+          }
+      }
+      .spesifikasi{
+          display: inline-flex;
+          width: 100%;
+          justify-content: space-between;
+          text-align: center;
+          font-size: small;
+          img {
+              max-width: 40px;
+          }
+      }
+      .ram-storage-wrapper{
+          .ram-storage{
+              padding: 0;
+              input{
+                  position: absolute;
+                  opacity: 0;
+              }
+              label{
+                  width: 100%;
+                  padding: 5px;
+              }
+          }
+      }
+      .color-wrapper{
+          .color{
+              padding: 0;
+              cursor: pointer;
+              input{
+                  position: absolute;
+                  opacity: 0;
+              }
+              label{
+                  padding: 5px;
+                  width: 100%;
+                  cursor: pointer;
+              }
+          }
+      }
+      .price-monthly{
+          font-size: xxx-large;
+          padding: 0px 10px;
+          color: red;
+      }
+      .btn-select{
+          border: 1px rgb(197, 196, 196) solid;
+          
+          :hover{
+              background-color: rgba(236, 235, 235, 0.527);
+              cursor: pointer;
+          }
+          &.select{
+              border: solid 2px rgb(119, 118, 118);
+
+          }
+      }
+      .submit {
+          font-size: xx-large;
+      }
+  }
+   // ============== MOBILE LANDSCAPE ====================
+      @media (max-width: 767.98px) { 
+          #product-detail{
+               .product-wrapper{
+              grid-template-columns: 1fr;
+                  section:nth-child(1){
+                      margin-bottom: 40px;
+                  }
+              }
+              .btn-select{
+                 
+              }
+          }
+       }
+  // ================= MOBILE POTRAIT =======================
+  @media (max-width: 575.98px) { 
+      #product-detail{
+          
+      }
+  }

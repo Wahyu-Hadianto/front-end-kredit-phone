@@ -18,6 +18,11 @@
             }
         }
     }
+    .error{
+        background-color: $bg-error;
+        color: red;
+        padding: 5px;
+    }
     // ========================= MY-ACCOUNT ======================
     #my-account{
         background-color: white;

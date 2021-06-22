@@ -109,28 +109,34 @@
             <!-- ========= SELECT TENOR ============== -->
             <section class="mb-4">
                 <h5>Jangka Waktu Angsuran</h5>
-                <select name="" v-on:change="setPriceMonthly" class="form-select" v-model="form.tenor">
+                <select name="" v-on:change="setPriceMonthly" 
+                :class="['form-select',{'is-invalid' : errors.tenor}]" 
+                v-model="form.tenor">
                     <option selected disabled value="0">Pilih Jangka Waktu</option>
                     <option value="3">3 Bulan</option>
                     <option value="6">6 Bulan</option>
                     <option value="9">9 Bulan</option>
                     <option value="12">12 Bulan</option>
                 </select>
+                <div class="invalid-feedback" v-if="errors.tenor">
+                    {{ errors.tenor }}
+                </div>
             </section>
             <section class="mb-4">
                 <h5>Cicilan Perbulan</h5>
                 <p class="price-monthly">
-                     Rp {{ new Intl.NumberFormat('ID').format(priceMonthly)}}
+                     Rp {{ new Intl.NumberFormat('ID').format(form.angsuran)}}
                 </p>
             </section>
             <section class="submit">
                 <button type="button" class="btn btn-primary"
-                v-on:click="submit">Ajukan Cicilan <span><i class="fas fa-sign-in-alt"></i></span> </button>
+                v-on:click="checkForm">Order Now  <span class="m-2"><i class="fas fa-sign-in-alt"></i></span> </button>
             </section>
           </section>
        </div>
     </div>
         </section>
+         <router-view ></router-view>
     </div>
 </template>
 <script>
@@ -143,7 +149,11 @@ export default {
                 product_id      : 0,
                 konfigurasi_id  : 0,
                 color_id        : 0,
-                tenor           : 0
+                tenor           : 0,
+                angsuran        : 0
+            },
+            errors : {
+                tenor : null
             },
             // =========== Data Product ============
             product : {},
@@ -157,9 +167,6 @@ export default {
                 display    : require('@/assets/static/spesifikasi/display.png'),
                 storage    : require('@/assets/static/spesifikasi/storage.png')}
             ,
-        // ============= Data Methods ==============
-         priceMonthly     : 0,
-         
         //  ========== DATA SLIDER ===================
         responsive : [
             {width : 100,imgWidth : 400},
@@ -185,9 +192,6 @@ export default {
                     this.slideWidth = this.responsive[i].imgWidth
                  }
                  this.styleContainer.width = this.slideWidth + 'px'
-        console.log(window.innerWidth)
-        console.log(this.slideWidth)
-        console.log(this.styleContainer.width)
        },
         setSlider(index){
             this.styleWrapper.marginLeft = -(this.slideWidth * index) + 'px' ;
@@ -205,7 +209,7 @@ export default {
         setPriceMonthly : function(event){
             let priceSelected = document.getElementById("price-selected").value;
             let monthly = event.target.value
-            this.priceMonthly = Math.ceil(priceSelected / monthly) 
+            this.form.angsuran = Math.ceil(priceSelected / monthly) 
         },
         setDataProduct : function(data){
             this.product = data.product
@@ -217,8 +221,33 @@ export default {
             this.startCurrentPrice(start)
 
         },
+        checkForm : function(){
+            if(this.form.tenor == 0){
+                this.errors.tenor = 'Pilih ini terlebih dahulu'
+            }else{
+                this.submit();
+            }
+        },
+        // ================= SUBMIT FORM ====================
         submit : function(){
-            console.log(this.form)
+            // cek user 
+            let data  = {
+                product_id       : this.product.product_id,
+                product_name     : this.product.product_name,
+                price      : {},
+                color      : {},
+                tenor      : this.form.tenor,
+                angsuran   : this.form.angsuran
+            }
+            data.price = this.product.prices.filter(price => {
+                return price.id == this.form.konfigurasi_id
+            })
+            data.color = this.product.colors.filter(color => {
+                return color.id == this.form.color_id
+            })
+            data = JSON.stringify(data)
+            sessionStorage.setItem('product',data)
+            this.$router.push('/order')
         }
     },
      beforeMount(){
@@ -240,147 +269,5 @@ export default {
 }
 </script>
 <style scoped lang="scss">
-   
-      #product-detail{
-          padding: 0px 5%;
-        .product-wrapper{
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            .submit{
-                width: 100%;
-                text-align: center;
-                font-size: x-large;
-                button{
-                    width: 80%;
-                   
-                }
-            }
-        
-        }
-        .slide-image {
-            text-align: center;
-            margin: 0px auto;
-            overflow-x: hidden;
-            .image-show-wrapper{
-                display: inline-flex;
-                transition: all .5s ease-out;
-            }
-            .image-show{
-               
-                img{
-                    cursor: pointer;
-                    
-                }
-            }
-            .image-wrapper{
-                display: inline-flex;
-                width: 80%;
-                .image-tmb {
-                    width: 100%;
-                    &.active{
-                        border: 2px solid darkgray;
-                        border-radius: 5px;
-                    }
-                    img {
-                        cursor: pointer;
-                        width: 100%;
-                    }
-                }
-            }
-        }
-       
-        .price-wrapper{
-            font-size: x-large;
-            font-weight: 500;
-        }
-        .price-wrapper.promo{
-            background-color: rgba(247, 147, 147, 0.205);
-            padding: 10px;
-            span:nth-child(1){
-                color: red;
-                font-size: x-large;
-                font-weight: 500;
-            }
-            span:nth-child(2){
-                font-size: small;
-                color: rgb(58, 58, 58);
-                text-decoration: line-through;
-            }
-        }
-        .spesifikasi{
-            display: inline-flex;
-            width: 100%;
-            justify-content: space-between;
-            text-align: center;
-            font-size: small;
-            img {
-                max-width: 40px;
-            }
-        }
-        .ram-storage-wrapper{
-            .ram-storage{
-                padding: 0;
-                input{
-                    position: absolute;
-                    opacity: 0;
-                }
-                label{
-                    width: 100%;
-                    padding: 5px;
-                }
-            }
-        }
-        .color-wrapper{
-            .color{
-                padding: 0;
-                cursor: pointer;
-                input{
-                    position: absolute;
-                    opacity: 0;
-                }
-                label{
-                    padding: 5px;
-                    width: 100%;
-                    cursor: pointer;
-                }
-            }
-        }
-        .price-monthly{
-            font-size: xxx-large;
-            padding: 0px 10px;
-            color: red;
-        }
-        .btn-select{
-            border: 1px rgb(197, 196, 196) solid;
-            
-            :hover{
-                background-color: rgba(236, 235, 235, 0.527);
-                cursor: pointer;
-            }
-            &.select{
-                border: solid 2px rgb(119, 118, 118);
-
-            }
-        }
-    }
-     // ============== MOBILE LANDSCAPE ====================
-        @media (max-width: 767.98px) { 
-            #product-detail{
-                 .product-wrapper{
-                grid-template-columns: 1fr;
-                    section:nth-child(1){
-                        margin-bottom: 40px;
-                    }
-                }
-                .btn-select{
-                   
-                }
-            }
-         }
-    // ================= MOBILE POTRAIT =======================
-    @media (max-width: 575.98px) { 
-        #product-detail{
-            
-        }
-    }
+   @import '../sass/component/product';
 </style>

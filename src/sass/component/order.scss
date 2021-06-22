@@ -1,0 +1,87 @@
+@import '../variable.scss';
+#order{
+    width: 70%;
+    background-color: white;
+    padding: 0 5%;
+    margin: 0px  auto;
+    .product-order{
+        display: flex;
+        flex-direction: row;
+        width: 80%;
+        margin: 0px auto;
+        padding: 15px;
+        justify-content: center;
+        background-color: $kp-blue-3;
+        .name {
+            display: flex;
+            align-items: center;
+        }
+            .image{
+                text-align: center;
+                margin-right: 15px;
+                img{
+                    width: 150px;
+                }
+            }
+    }
+    .form-order{
+        .error{
+            p{
+                background-color: rgb(247, 212, 212);
+                text-align: center;
+                padding: 5px;
+            }
+            font-weight: 500;
+            color: red;
+
+        }
+        .submit{
+            display: flex;
+            button{
+                font-size: x-large;
+                margin: 10px auto;
+                width: 50%;
+            }
+        }
+       
+    }
+}
+
+@media (max-width: 992px) { 
+    #order{
+        width: 90%;
+ 
+        .product-order{
+            width: 100%;
+        }
+    }
+}
+@media (max-width: 768px) { 
+    #order{
+        .product-order{
+            width: 100%;
+            padding: 10px;
+            .image{
+                margin-right: 15px;
+                
+            }
+            .description{
+           
+                width: 60%;
+
+            }
+        }
+    }
+}
+@media (max-width: 576px) { 
+    #order{
+        width: 100%;
+        .product-order{
+            .image{
+                img{
+                    width: 100px;
+                }
+            }
+        }
+    }
+ }

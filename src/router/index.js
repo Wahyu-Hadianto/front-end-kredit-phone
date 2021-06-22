@@ -7,6 +7,7 @@ import Register from '../views/Register.vue'
 import Login from '../views/Login.vue'
 import Products from '../views/Products.vue'
 import Me from '../views/Me.vue'
+import Order from '../views/Order.vue'
 Vue.use(VueRouter)
 
 const routes = [
@@ -24,9 +25,17 @@ const routes = [
     component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
   },
   {
+    path : '/order',
+    component : Order,
+    meta    : {requiresAuth :true }
+  
+  }
+  ,
+  {
     path        : '/product/:slug',
     component   : Product,
-    name        : 'Product'
+    name        : 'Product',
+    
    
   },
   {
@@ -61,6 +70,10 @@ const routes = [
     meta        : {
       requiresAuth: true
     }
+  },
+  {
+    path : '*',
+    component : ()=>import('../views/404.vue')
   }
 ]
 

@@ -24,6 +24,14 @@
                <input type="file" v-on:change="avatarPreview">
                <span>Ukuran Gambar Maksimal : 1 MB</span>
                <span>Format Foto : .JPEG , .PNG</span>
+               <span v-if="errors.avatar" class="error">
+                   {{ errors.avatar.avatar[0] }}
+               </span>
+           </div>
+           <div v-if="errors.form">
+               <span v-for="(error,index) in errors.form" :key="index">
+                   {{ error }}
+               </span>
            </div>
         <div class="form-floating mb-3">
             <input type="text" class="form-control" id="name" placeholder="name@example.com" v-model="form.name">
@@ -38,7 +46,7 @@
             <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
         </div>
         <div class="mb-3 text-center">
-            <button class="btn btn-primary save">Save <span><i class="far fa-save"></i></span></button>
+            <button class="btn btn-primary save" v-on:click="submitForm">Save <span><i class="far fa-save"></i></span></button>
         </div>
        </div>
        <!-- ====================== NOTIFIKASI ======================== -->
@@ -55,6 +63,7 @@
              <p>Belum ada pesanan</p>
            </div>
        </div>
+       <router-view></router-view>
     </div>
 </template>
 <script>
@@ -72,7 +81,11 @@ export default {
             },
             sideActive : 'my-account',
             notifikasi : '',
-            myOrder    : ''
+            myOrder    : '',
+            errors : {
+                'avatar' : '',
+                'form'   : ''
+            }
         }
     },
     methods : {
@@ -88,9 +101,44 @@ export default {
                 self.avatar = reader.result
             }
             reader.readAsDataURL(event.target.files[0]);
+            this.form.avatar = event.target.files[0]
         },
         changeSide(side){
             this.sideActive = side
+        },
+        submitForm(){
+         if(this.form.avatar){
+            this.updateAvatar()  
+         }else{
+             this.updateUser();
+         }
+       
+        },
+        async updateAvatar(){
+             this.$store.dispatch('loading',true)
+            let formData = new FormData();
+            formData.append('avatar',this.form.avatar);
+            const response = await axios.post('/user/avatar',formData,{
+                headers : {'Content-Type': 'multipart/form-data'}
+            }).catch(error =>{
+                    const errors = error.response.data.errors
+                    this.errors.avatar = errors
+            }).finally(()=>{
+                 this.$store.dispatch('loading',false)
+            })
+            this.user.avatar = response.data.user.avatar
+            this.$store.dispatch('login',response.data.user)
+        },
+        async updateUser(){
+                this.$store.dispatch('loading',true)
+               const response = await axios.put('/user',this.form)
+                    .catch(error =>{
+                         const errors = error.response.data.errors
+                        this.errors.avatar = errors
+                    }).finally(()=>{
+                         this.$store.dispatch('loading',false)
+                    })
+                    this.setForm(response.data.user)   
         }
 
     },
