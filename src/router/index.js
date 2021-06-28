@@ -39,7 +39,7 @@ const routes = [
    
   },
   {
-    path        : '/products',
+    path        : '/products/:search?',
     component   : Products,
     name        : 'Products'
    

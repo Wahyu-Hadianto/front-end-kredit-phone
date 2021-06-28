@@ -118,38 +118,5 @@ export default {
 }
 </script>
 <style scoped lang="scss">
-     $kp-blue : rgb(44, 132, 233) ;
-    #register {
-        padding: 40px 0;
-        background-color: rgb(241, 240, 240);
-        display: flex;
-        .header{
-            background-color:rgb(253, 253, 253);
-            border-radius: 10px;
-            box-shadow: 0px 10px 6px -6px rgba($color: #8f8f8f5e, $alpha: 0.2);
-            width: 60%;
-            padding: 15px;
-            margin: 0px auto;
-            margin-top: -60px;
-
-            span{
-                color: $kp-blue;
-                font-weight: 600;
-            }
-        }
-        .register-wrapper{
-            height: max-content;
-            margin: auto 0px;
-            padding: 30px;
-            border-radius: 15px;
-            display: flex;
-            justify-content: center;
-            flex-direction: column;
-            max-width: 500px;
-            .submit{
-                width: 60%;
-                font-size: x-large;
-            }
-        }
-    }
+     @import '../sass/component/register.scss';
 </style>

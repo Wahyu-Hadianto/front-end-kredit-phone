@@ -257,7 +257,7 @@ export default {
     },
     mounted(){
         // ========== REQUEST PRODUUCT ==========
-            Axios.get('/product/'+ this.params)
+            Axios.get('/product/',{ params : { slug : this.params }})
             .then(resp => {
                 this.setDataProduct(resp.data)
             })

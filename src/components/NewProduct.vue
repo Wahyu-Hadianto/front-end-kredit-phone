@@ -42,9 +42,9 @@ export default {
          this.$store.dispatch('loading',true)
     },  
     mounted(){
-        Axios.get('/products/take/4')
+        Axios.get('/products',{params : {take : 4}})
       .then(resp => {
-        
+        console.log(resp)
         this.products = resp.data.products
       })
       .finally(()=>{

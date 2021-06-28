@@ -16,8 +16,8 @@
             <div class="nav-list" :class="{active : navStatus}" v-on:click="disableNav">
                 <router-link to="/" >Home</router-link>
                 <router-link to="/products" >Product</router-link>
-                <router-link to="/about" >About Us</router-link>
-                <router-link to="/kontak" >Contact Us</router-link>
+                <a href="#">About Us</a>
+                <a href="#">Contact Us</a>
                 <div class="auth-mobile">
                     <router-link to="/login">Login</router-link> |
                     <router-link to="/register">Register</router-link>
@@ -46,8 +46,8 @@
             <!-- search desktop -->
             <div class="on-desktop search-box" :class="{ active : searchStatus}">
                 <div class="search-bar">
-                     <input type="search" name="" id="" placeholder="Cari Disini!!">
-                <span><i class="fas fa-search"></i></span>
+                     <input type="search" v-model="searchInput" placeholder="Cari Disini!!">
+                <span v-on:click="searchHandle"><i class="fas fa-search"></i></span>
                 </div> 
                 <div v-if="searchStatus">
                     <button class="btn btn-light" type="button" v-on:click="searchToggle">Batal</button>
@@ -87,6 +87,7 @@ export default {
         return {
             navStatus : false,
             searchStatus : false ,
+            searchInput  : ''
             
         }
        
@@ -102,6 +103,9 @@ export default {
             this.searchStatus = !this.searchStatus;
             
         },
+        searchHandle : function(){
+            this.$router.push('/products/' + this.searchInput)
+        }
     },
     computed : {
         ...mapGetters({user : 'user'}),

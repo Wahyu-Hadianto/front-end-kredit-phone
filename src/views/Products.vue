@@ -12,7 +12,7 @@
             </div>
         </section>
           <!-- =============== LIST PRODUCTS ===============  -->
-        <section class="products-wrapper">
+        <section class="products-wrapper mb-4">
             <div v-for="(product,index) in products" :key="index" class="product-item">
                 <router-link :to="{name: 'Product',params :{ slug :product.slug }}">
                     <!-- === image item ===== -->
@@ -36,6 +36,11 @@
                 </router-link>
             </div>
         </section>
+         <section class="pagination mb-4 justify-content-center">
+            <div v-for="index in pagination.totalPage" :key="index">
+                <button v-on:click="sliceProducts(index)" :class="['btn btn-outline-dark',{active : index == pagination.PageActive }]">{{ index }}</button>
+            </div>
+        </section>
     </div>
 </template>
 <script>
@@ -46,14 +51,21 @@ export default {
             mereks : [],
             merekActive : '',
             productsOrigin : [],
-            products : []
+            products : [],
+            productsPaginate : [],
+            pagination : {  
+                PageActive : 1,
+                items     : 12,
+                totalPage : 0,
+            }
         }
     },
-    beforeMount(){
-         this.$store.dispatch('loading',true) 
+    beforeCreate(){
+        
     },
     mounted(){
-        axios.get('/mereks')
+        this.$store.dispatch('loading',true) 
+          axios.get('/mereks')
         .then(resp => {
             this.mereks = resp.data.mereks
             
@@ -62,24 +74,34 @@ export default {
         axios.get('/products')
         .then(resp => {
             this.productsOrigin = resp.data.products
-            this.products = resp.data.products    
+            this.productsPaginate = resp.data.products    
         })
         .finally(()=>{
          this.$store.dispatch('loading',false) 
+          this.startPagination(this.productsOrigin)
         })
-
-       
+        console.log(this.$route.params.search)
     },
+    
     methods : {
         filterProducts : function(merekName){
-            this.products = this.productsOrigin.filter((merek)=>{
+            this.productsPaginate = this.productsOrigin.filter((merek)=>{
                 return merek.merek == merekName
             })
             this.merekActive = merekName
+            this.startPagination()
         },
         resetProducts : function(){
-            this.products = this.productsOrigin
+            this.productsPaginate = this.productsOrigin
             this.merekActive = ''
+            this.startPagination()
+        },
+        sliceProducts : function(index){
+            this.products = this.productsPaginate.slice((index - 1) * this.pagination.items ,this.pagination.items * index)
+            this.pagination.PageActive = index
+        },startPagination: function(){
+            this.pagination.totalPage = Math.ceil(this.productsPaginate.length / this.pagination.items)
+            this.sliceProducts(1); 
         }
     }
 }
@@ -151,6 +173,7 @@ export default {
                 }
             }
         }
+        
     }
     // =========== MOBILE LANDSCAPE ==========
 

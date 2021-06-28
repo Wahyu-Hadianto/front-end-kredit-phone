@@ -2,7 +2,7 @@
   <div class="home">
      <slideBanner></slideBanner>
     <section class="content">
-       <slidePromo :productsPromo="productsPromo"></slidePromo>
+       <slidePromo></slidePromo>
         <NewProduct/>
     </section>
     <section>
@@ -15,7 +15,6 @@
 import slideBanner from '@/components/SlideBanner.vue';
 import slidePromo from '@/components/SlidePromo.vue';
 import NewProduct from '@/components/NewProduct.vue';
-import Axios from 'axios';
 export default {
   name: 'Home',
   data : function(){
@@ -27,7 +26,6 @@ export default {
         
         ],
         'products' : [],
-        'productsPromo' : []
       
     }
   },
@@ -38,13 +36,6 @@ export default {
   },
   mounted(){
     //  get promo products
-    Axios.get('/products/promo')
-    .then(resp =>{
-      this.productsPromo = resp.data.products
-    })
-    .finally(()=>{
-      this.$store.dispatch('loading',false)
-    })
   },
   components: {
       slideBanner,

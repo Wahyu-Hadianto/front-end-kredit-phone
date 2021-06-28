@@ -17,52 +17,11 @@
         <!-- =========== SLIDE WRAPPPER =============== -->
         <section class="slide-container" ref="slideContainer">
             <div class="wrapper" :style="styleWrapper">
-                <div class="item-slide" :style="styeObject" v-for="(product,index) in productsPromo" :key="index">
+                <div class="item-slide" :style="styeObject" v-for="(product,index) in products" :key="index">
                     <div class="item-inner">
                        <PromoItem :product="product"></PromoItem>
                     </div>
                 </div>
-                <div class="item-slide" :style="styeObject">
-                    <div class="item-inner">
-                        
-                    </div>
-                </div>
-                <div class="item-slide" :style="styeObject">
-                    <div class="item-inner">
-                        item 3
-                    </div>
-                </div>
-                <div class="item-slide" :style="styeObject">
-                    <div class="item-inner">
-                        item 4
-                    </div>
-                </div>
-                <div class="item-slide" :style="styeObject">
-                    <div class="item-inner">
-                        item 5
-                    </div>
-                </div>
-                <div class="item-slide" :style="styeObject">
-                    <div class="item-inner">
-                        item 1
-                    </div>
-                </div>
-                <div class="item-slide" :style="styeObject">
-                    <div class="item-inner">
-                        item 6
-                    </div>
-                </div>
-                <div class="item-slide" :style="styeObject">
-                    <div class="item-inner">
-                        item 7
-                    </div>
-                </div>
-                <div class="item-slide" :style="styeObject">
-                    <div class="item-inner">
-                        item 8
-                    </div>
-                </div>
-            
             </div>
         </section>
         <!-- <section>
@@ -71,14 +30,13 @@
     </div>
 </template>
 <script>
-import PromoItem from '@/components/PromoItem.vue'
+import PromoItem from '@/components/PromoItem.vue';
+import Axios from 'axios';
 export default {
     data : function(){
         return {
             // ============= DATA PRODUCT ==============
-            // productsPromo : [],
-
-
+            products: [],
             // ============= DATA SLIDE ================
             responsive : [
                 {width : 100,items :2},
@@ -87,9 +45,10 @@ export default {
             ],
             containerWidth : 0,
             items : 0,
+            totalSlide : 0,
             margin : 0,
             marginWrapper : 0,
-            currentIndex : 0,
+            currentIndex : 1,
             itemSlideWidth : '',
             styleWrapper : {
                 marginLeft : ''
@@ -100,7 +59,6 @@ export default {
             }
         }
     },
-    props : {productsPromo: Array},
      components :  {
         PromoItem
     },
@@ -111,6 +69,7 @@ export default {
                     this.items  = this.responsive[i].items
                 }
             }
+            this.totalSlide = Math.ceil(this.products.length / this.items) 
         },
         getWidthContainer : function(){
             this.containerWidth = this.$refs.slideContainer.clientWidth 
@@ -120,12 +79,14 @@ export default {
             this.styeObject.width = this.containerWidth  / this.items +'px';
         },
         nextSlide(){
-            this.marginWrapper -= this.containerWidth 
-            this.currentIndex += 1;
-            this.startSlider();
+            if(this.currentIndex < this.totalSlide){
+                this.marginWrapper -= this.containerWidth 
+                this.currentIndex += 1;
+                this.startSlider();
+            }
         },
         prevSlide(){
-            if(this.currentIndex > 0){
+            if(this.currentIndex > 1){
             this.currentIndex -= 1;
             this.marginWrapper += this.containerWidth;
             this.startSlider();
@@ -133,16 +94,28 @@ export default {
           
         },
         startSlider(){
-            this.styleWrapper.marginLeft = this.marginWrapper + 'px'
+            this.styleWrapper.marginLeft = this.marginWrapper + 'px';
+
         }
     },
     computed : {
          
     },
     mounted(){
+          Axios.get('/products/promo')
+        .then(resp =>{
+        this.products = resp.data.products
+        })
+        .finally(()=>{
+        this.$store.dispatch('loading',false)
         this.setItems();
         this.getWidthContainer();
+        })
+        
     },
+    beforeCreate(){
+      
+    }
    
 }
 </script>
