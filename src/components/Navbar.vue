@@ -46,8 +46,8 @@
             <!-- search desktop -->
             <div class="on-desktop search-box" :class="{ active : searchStatus}">
                 <div class="search-bar">
-                     <input type="search" v-model="searchInput" placeholder="Cari Disini!!">
-                <span v-on:click="searchHandle"><i class="fas fa-search"></i></span>
+                     <input type="search" v-model="searchInput" placeholder="Cari Disini!!" autofocus required>
+                <span v-on:click="searchHandle"><i class="fas fa-search btn-search"></i></span>
                 </div> 
                 <div v-if="searchStatus">
                     <button class="btn btn-light" type="button" v-on:click="searchToggle">Batal</button>
@@ -63,14 +63,14 @@
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                         <li class="dropdown-item"><router-link to="me">Profile </router-link></li>
-                        <li class="dropdown-item" v-on:click="logout">Keluar</li>
+                        <li class="dropdown-item" v-on:click="logout">Log Out</li>
                     </ul>
                     </div>
                 </div>
                 <!-- ======= JIKA USER BELUM LOGIN -========= -->
                 <div v-else>
-                    <router-link to="/login">Masuk</router-link> |
-                    <router-link to="/register">Daftar</router-link>
+                    <router-link to="/login">Login</router-link> |
+                    <router-link to="/register">Register</router-link>
                     
                 </div>
             </div>
@@ -104,7 +104,16 @@ export default {
             
         },
         searchHandle : function(){
-            this.$router.push('/products/' + this.searchInput)
+           if(this.$router.app._route.name != 'Products'){
+               this.$router.push('/products/' + this.searchInput)
+           }else{
+            this.$store.dispatch('loading',true) 
+               this.$store.dispatch('searchProducts',this.searchInput).finally(()=>{
+                    this.$store.dispatch('loading',false)  
+               })
+           }
+            this.searchStatus = false;
+            this.searchInput = '';
         }
     },
     computed : {

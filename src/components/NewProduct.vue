@@ -44,7 +44,6 @@ export default {
     mounted(){
         Axios.get('/products',{params : {take : 4}})
       .then(resp => {
-        console.log(resp)
         this.products = resp.data.products
       })
       .finally(()=>{

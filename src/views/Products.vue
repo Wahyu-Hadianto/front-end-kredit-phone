@@ -1,4 +1,4 @@
-<template>
+<template >
     <div id="products">
         <!-- =============== MEREK SELECT ===============  -->
         <section class="header">
@@ -12,6 +12,9 @@
             </div>
         </section>
           <!-- =============== LIST PRODUCTS ===============  -->
+        <section class="mb-3" v-if="searchQuery">
+          <h3>Search result "{{ searchQuery }}"</h3>  
+        </section>
         <section class="products-wrapper mb-4">
             <div v-for="(product,index) in products" :key="index" class="product-item">
                 <router-link :to="{name: 'Product',params :{ slug :product.slug }}">
@@ -36,161 +39,62 @@
                 </router-link>
             </div>
         </section>
-         <section class="pagination mb-4 justify-content-center">
+         <section class="pagination mb-4 justify-content-center" v-if="pagination.totalPage > 1">
             <div v-for="index in pagination.totalPage" :key="index">
                 <button v-on:click="sliceProducts(index)" :class="['btn btn-outline-dark',{active : index == pagination.PageActive }]">{{ index }}</button>
             </div>
         </section>
+        <section>
+        </section>
     </div>
 </template>
 <script>
-import axios from 'axios'
+// import axios from 'axios'
+import {mapGetters} from 'vuex'
 export default {
     data : function(){
         return {
-            mereks : [],
-            merekActive : '',
-            productsOrigin : [],
-            products : [],
-            productsPaginate : [],
-            pagination : {  
-                PageActive : 1,
-                items     : 12,
-                totalPage : 0,
-            }
+          
         }
     },
-    beforeCreate(){
-        
+    computed : {
+        ...mapGetters({
+            merekActive : 'getMerekActive',
+            mereks : 'getMereks',
+            products : 'getProducts',
+            pagination : 'getPagination',
+            searchQuery : 'getSearchQuery'
+        })
     },
     mounted(){
         this.$store.dispatch('loading',true) 
-          axios.get('/mereks')
-        .then(resp => {
-            this.mereks = resp.data.mereks
-            
+        this.$store.dispatch('mereks')
+        this.$store.dispatch('products').finally(()=>{
+            // this.startPagination()
+        this.$store.dispatch('loading',false)
         })
-        // ========== Request All products ===============
-        axios.get('/products')
-        .then(resp => {
-            this.productsOrigin = resp.data.products
-            this.productsPaginate = resp.data.products    
-        })
-        .finally(()=>{
-         this.$store.dispatch('loading',false) 
-          this.startPagination(this.productsOrigin)
-        })
-        console.log(this.$route.params.search)
+        if(this.$route.params.search){
+            this.$store.dispatch('searchProducts',this.$route.params.search)
+        }
     },
-    
     methods : {
-        filterProducts : function(merekName){
-            this.productsPaginate = this.productsOrigin.filter((merek)=>{
-                return merek.merek == merekName
-            })
-            this.merekActive = merekName
-            this.startPagination()
+        filterProducts : function(merek){
+            this.$store.commit('filterProducts',merek)
+         
         },
         resetProducts : function(){
-            this.productsPaginate = this.productsOrigin
-            this.merekActive = ''
-            this.startPagination()
+            this.$store.commit('resetProducts')
+
         },
         sliceProducts : function(index){
-            this.products = this.productsPaginate.slice((index - 1) * this.pagination.items ,this.pagination.items * index)
-            this.pagination.PageActive = index
-        },startPagination: function(){
-            this.pagination.totalPage = Math.ceil(this.productsPaginate.length / this.pagination.items)
-            this.sliceProducts(1); 
-        }
+            this.$store.commit('sliceProducts',index)
+        },
+        searchInPage : function(){
+            console.log(this.searchInput)
+        },
     }
 }
 </script>
 <style scoped lang="scss">
-@import '../sass/variable.scss';
-    #products {
-        padding: 0 5%;
-        .header{
-            padding:15px 0;        
-            }
-        .mereks{
-            color: $gray-900;
-            display: flex;
-            justify-content: center;
-            li{
-                padding: 5px 15px;
-                background-color: white;
-                border-radius: 8px;
-                cursor: pointer;
-                margin: 5px 15px;
-                list-style-type: none;
-                &.active{
-                    border: 2px solid $kp-blue;
-                }
-            }
-        }
-        .products-wrapper{
-            display: grid;
-            grid-template-columns: 1fr 1fr 1fr 1fr;
-            gap: 15px;
-        }
-        .product-item{
-            box-shadow: black 8px 6px 8px -10px;
-            border-radius: 10px;
-            &:hover{
-                transform: scale(1.01);
-            }
-            a{
-                color:$gray-800;
-                text-decoration: none;
-            }
-            .image{
-                text-align: center;
-                padding-top: 15px;
-                img {
-                    width: 70%;
-                }
-            }
-            .text{
-                text-align: center;
-                .ram-storage{
-                    margin-bottom: 15px;
-
-                }
-                .price-promo{
-                    display: flex;
-                    justify-content: center;
-                    p{
-                        margin: 5px;
-                    }
-                    p:nth-child(1){
-                        color: red;
-                    }
-                    p:nth-child(2){
-                        text-decoration: line-through;
-                        font-size: small;
-                    }
-                }
-            }
-        }
-        
-    }
-    // =========== MOBILE LANDSCAPE ==========
-
-    @media (max-width: 767.98px) { 
-        #products{
-            .products-wrapper{
-                grid-template-columns: 1fr 1fr 1fr;
-            }
-        }
-    }
-    // =========== MOBILE VIEW =====================
-
-    @media (max-width: 575.98px) {
-             #products{
-            .products-wrapper{
-                grid-template-columns: 1fr 1fr;
-            }
-        }
-    }
+    @import '../sass/component/products.scss';
 </style>

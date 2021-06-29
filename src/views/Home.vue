@@ -1,12 +1,15 @@
 <template>
   <div class="home">
-     <slideBanner></slideBanner>
+    <div v-if="errorConn">
+        Maaf Sepertinya terjadi kesalahan
+    </div>
+    <div v-else>
+      <slideBanner></slideBanner>
     <section class="content">
        <slidePromo></slidePromo>
         <NewProduct/>
     </section>
-    <section>
-    </section>
+    </div>
   </div>
 </template>
 
@@ -28,8 +31,6 @@ export default {
         'products' : [],
       
     }
-  },
-  methods : {
   },
   beforeMount(){
     this.$store.dispatch('loading',true)
