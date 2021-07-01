@@ -1,12 +1,12 @@
 <template>
   <div class="home">
     <div v-if="errorConn">
-        Maaf Sepertinya terjadi kesalahan
+       <ErrorConn></ErrorConn>
     </div>
     <div v-else>
-      <slideBanner></slideBanner>
+      <SlideBanner></SlideBanner>
     <section class="content">
-       <slidePromo></slidePromo>
+       <SlidePromo></SlidePromo>
         <NewProduct/>
     </section>
     </div>
@@ -15,9 +15,11 @@
 
 <script>
 // @ is an alias to /src
-import slideBanner from '@/components/SlideBanner.vue';
-import slidePromo from '@/components/SlidePromo.vue';
+import SlideBanner from '@/components/SlideBanner.vue';
+import SlidePromo from '@/components/SlidePromo.vue';
 import NewProduct from '@/components/NewProduct.vue';
+import  ErrorConn from '@/components/ErrorConn.vue';
+import {mapGetters} from 'vuex';
 export default {
   name: 'Home',
   data : function(){
@@ -35,20 +37,22 @@ export default {
   beforeMount(){
     this.$store.dispatch('loading',true)
   },
-  mounted(){
-    //  get promo products
+  computed: {
+        ...mapGetters({
+          errorConn : 'getErrorConn'
+          })
   },
   components: {
-      slideBanner,
-      slidePromo,
-      NewProduct
+      SlideBanner,
+      SlidePromo,
+      NewProduct,
+      ErrorConn
 
   }
 }
 </script>
 <style scoped lang="scss">
-     .content{
-       
+     .content{  
        margin: 0px auto;
      }
 </style>

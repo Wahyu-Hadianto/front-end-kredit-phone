@@ -6,7 +6,7 @@
            </div>
            <div class="description">
                <div class="name">
-                   <h4>{{ product.product_name}}</h4>
+                   <h5>{{ product.product_name}}</h5>
                     <span>( {{ product.color[0].color_name }})</span>
                </div>
                <div class="price">
@@ -22,7 +22,7 @@
                     </p>
                </div>
                <div class="angsuran">
-                   <p>Angsuran : {{ product.tenor }} X Rp {{ new Intl.NumberFormat('ID').format(product.angsuran) }}</p>
+                   <p>Angsuran : {{ product.tenor[0].tenor  }} X Rp {{ new Intl.NumberFormat('ID').format(product.angsuran) }}</p>
                </div>
            </div>
        </section>
@@ -54,12 +54,12 @@
 </template>
 <script>
 import axios from 'axios'
+import { mapGetters } from 'vuex'
 export default {
     data : function(){
         return {
             product : {
-                color : [],
-                price : []
+               
             },
             form : {
                 name : '',
@@ -74,36 +74,44 @@ export default {
         }
     },
     methods : {
+       setForm : function(product,user){
+           this.form.name       = user.name
+           this.form.telepon    = user.telepon
+           this.form.address    = user.address
+           this.form.product_id = product.product_id
+           this.form.price_id   = product.price[0].id
+           this.form.color_id   = product.color[0].id
+           this.form.tenor      = product.tenor[0].id
+       },
        async submitForm(){
             this.$store.dispatch('loading',true)
            const response = await axios.post('/user/order',this.form)
-                            .catch(error => {
-                                console.log(error.response.data.errors)
+                            .catch(() => {
                                 this.error = true
+                            }).finally(()=>{
+                                this.$store.dispatch('loading',false)
                             })
-                this.$store.dispatch('loading',false)
                 if(response.status == 201){
-                    this.$router.push('/me')
+                    this.$router.push({name : 'Me',params : {tab :'my-order'}})
                 }
        }
     },
+    computed : {
+        ...mapGetters({
+            user : 'user'
+        })
+    },
     beforeMount(){
-            let product = JSON.parse(sessionStorage.getItem('product')) 
+       
+            const product = JSON.parse(sessionStorage.getItem('productOrder')) ;
             if(!product){
                 this.$router.push('/')
             }
+
             this.product = product
-            this.form.product_id = product.product_id
-            this.form.price_id  = product.price[0].id
-            this.form.color_id  = product.color[0].id
-            this.form.tenor     = product.tenor
-            // ============ GET USER ==============
-            axios.get('/user')
-            .then(resp =>{
-                const user = resp.data.user;
-                this.form.name = user.name,
-                this.form.telepon = user.telepon
-                this.form.address = user.address
+            this.$store.dispatch('user').finally(()=>{
+                let user = this.$store.getters.user
+                this.setForm(product,user)
             })
     }
 }

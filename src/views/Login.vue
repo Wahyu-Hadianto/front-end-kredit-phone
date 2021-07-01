@@ -42,7 +42,8 @@
     </div>
 </template>
 <script>
-import Axios from 'axios'
+// import Axios from 'axios'
+import {mapGetters} from 'vuex';
 export default {
     data : function(){
         return {
@@ -50,38 +51,47 @@ export default {
                 email       : '',
                 password    : ''
             },
-            error :{
-                email : null,
-                password : null
-            }
+           
         }
     },
-    beforeCreate(){
-        
+    computed : {
+        ...mapGetters({
+            error : 'loginError'
+        })
     },
     methods : {
-         async login() {
-             this.$store.dispatch('loading',true)
-             const response = await Axios.post('/login',{
-                 email : this.form.email,
-                 password : this.form.password
-             }).catch(error => {
-                 const errors = error.response.data.errors
-                 this.error.email = errors.email
-                 this.error.password = errors.password
-                // reset form 
+        login : function(){
+            let form  = this.form
+            this.$store.dispatch('login',form).catch(()=>{
                 this.form.password = ''
-                this.$store.dispatch('loading',false)
-             });
-             if(response.status == 200){
-                 localStorage.setItem('token',response.data.token)
-                 this.$store.dispatch('login',response.data.data)
-                 this.$store.dispatch('loading',false)
-                 this.$router.push('/')
-                
-             }
-             this.$store.dispatch('loading',false)
+               
+            })
+            .finally(()=>{
+                this.$router.push({name : 'Home'})
+            })
         }
+        //  async login() {
+        //      this.$store.dispatch('loading',true)
+        //      const response = await Axios.post('/login',{
+        //          email : this.form.email,
+        //          password : this.form.password
+        //      }).catch(error => {
+        //          const errors = error.response.data.errors
+        //          this.error.email = errors.email
+        //          this.error.password = errors.password
+        //         // reset form 
+        //         this.form.password = ''
+        //         this.$store.dispatch('loading',false)
+        //      });
+        //      if(response.status == 200){
+        //          localStorage.setItem('token',response.data.token)
+        //          this.$store.dispatch('login',response.data.data)
+        //          this.$store.dispatch('loading',false)
+        //          this.$router.push({name : 'Home'})
+                
+        //      }
+        //      this.$store.dispatch('loading',false)
+        // }
         
     }
 }

@@ -50,40 +50,5 @@ export default {
 }
 </script>
 <style scoped lang="scss">
-    .link-product{
-        display: block;
-        text-decoration: none;
-        color: rgb(19, 18, 18);
-       
-    }
-    .sale-item-box{
-        padding: 10px 0;
-        // ========= COUNTDOWN ======== //
-        // =========== IMage ==============
-        .sale-image{
-           img {
-               width: 90%;
-           }
-        }
-        // ============= Deskripsi ============
-        .sale-text {
-            .price-product{
-                display: flex;
-                justify-content: center;
-                .normal-price,.sale-price{
-                    margin: 0px 5px;
-                    align-items: center;
-                }
-                .sale-price{
-                    font-weight: 500;
-                    font-size: large;
-                    color: red;
-                }
-                .normal-price{
-                    font-size: small;
-                    text-decoration: line-through;
-                }
-            }
-        } 
-    }
+   @import '../sass/component/promo_item.scss';
 </style>

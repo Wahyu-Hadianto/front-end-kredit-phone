@@ -12,7 +12,6 @@
 import Navbar from '@/components/Navbar.vue'
 import Footer from '@/components/Footer.vue'
 import Loading from '@/components/Loading.vue'
-import Axios from 'axios'
 
 export default {
     components : {
@@ -23,29 +22,17 @@ export default {
     beforeCreate(){
        // ============ Jika Ada Token =========
       if(this.$store.getters.hasToken){
-            Axios.get('/user').
-            then(response => {
-              if(response.status == 200){
-              this.$store.dispatch('login',response.data.user)
-            }
-          })
+          this.$store.dispatch('user')
       }
       
     },
-    mounted(){
-     
-      
-    },
-  
     methods : {
-      async logout(){
-        const response = await Axios.get('/logout')
-        if(response.status == 200){
-          localStorage.removeItem('token')
-          this.$store.dispatch('logout')
+      logout : function(){
+         this.$store.dispatch('loading',true) 
+        this.$store.dispatch('logout').finally(()=>{
+           this.$store.dispatch('loading',false) 
           this.$router.push('/')
-          console.log(this.$store.getters.isLoggedIn)
-        }
+        })
       }
     }
       

@@ -112,11 +112,12 @@
                 <select name="" v-on:change="setPriceMonthly" 
                 :class="['form-select',{'is-invalid' : errors.tenor}]" 
                 v-model="form.tenor">
-                    <option selected disabled value="0">Pilih Jangka Waktu</option>
-                    <option value="3">3 Bulan</option>
-                    <option value="6">6 Bulan</option>
-                    <option value="9">9 Bulan</option>
-                    <option value="12">12 Bulan</option>
+                    <option disabled value="">Pilih Jangka Waktu</option>
+                    <option :value="item.id" 
+            
+                        v-for="(item,index) in tenor" :key="index">
+                        {{ item.tenor }}
+                    </option>
                 </select>
                 <div class="invalid-feedback" v-if="errors.tenor">
                     {{ errors.tenor }}
@@ -135,8 +136,7 @@
           </section>
        </div>
     </div>
-        </section>
-         <router-view ></router-view>
+    </section>
     </div>
 </template>
 <script>
@@ -149,13 +149,14 @@ export default {
                 product_id      : 0,
                 konfigurasi_id  : 0,
                 color_id        : 0,
-                tenor           : 0,
+                tenor           : '',
                 angsuran        : 0
             },
             errors : {
                 tenor : null
             },
             // =========== Data Product ============
+            tenor : [],
             product : {},
             colors  : [],
             spesifikasi : [],
@@ -206,10 +207,14 @@ export default {
                 this.form.konfigurasi_id = start
             }
         },
-        setPriceMonthly : function(event){
+        setPriceMonthly : function(){
             let priceSelected = document.getElementById("price-selected").value;
-            let monthly = event.target.value
-            this.form.angsuran = Math.ceil(priceSelected / monthly) 
+            let tenorId = this.form.tenor 
+            let tenor = this.tenor.filter(item =>{
+                return item.id == tenorId
+            })
+           tenor = parseFloat(tenor[0].tenor)
+            this.form.angsuran = Math.ceil(priceSelected / tenor) 
         },
         setDataProduct : function(data){
             this.product = data.product
@@ -222,7 +227,7 @@ export default {
 
         },
         checkForm : function(){
-            if(this.form.tenor == 0){
+            if(this.form.tenor == ''){
                 this.errors.tenor = 'Pilih ini terlebih dahulu'
             }else{
                 this.submit();
@@ -236,7 +241,7 @@ export default {
                 product_name     : this.product.product_name,
                 price      : {},
                 color      : {},
-                tenor      : this.form.tenor,
+                tenor      : {},
                 angsuran   : this.form.angsuran
             }
             data.price = this.product.prices.filter(price => {
@@ -245,18 +250,27 @@ export default {
             data.color = this.product.colors.filter(color => {
                 return color.id == this.form.color_id
             })
+             let tenorId = this.form.tenor 
+            let tenor = this.tenor.filter(item =>{
+                return item.id == tenorId
+            })
+            data.tenor = tenor
             data = JSON.stringify(data)
-            sessionStorage.setItem('product',data)
-            this.$router.push('/order')
+            sessionStorage.setItem('productOrder',data);
+            this.$router.push({name: 'Order'})
         }
     },
      beforeMount(){
-    this.$store.dispatch('loading',true)
+  
      // ========== Setup Slide Container Width ============
             this.setContainerWidth();
     },
     mounted(){
-        // ========== REQUEST PRODUUCT ==========
+        // ========== REQUEST PRODUUCT =========='
+            this.$store.dispatch('loading',true)
+            Axios.get('/tenor').then(resp => {
+                this.tenor = resp.data.tenor
+            });
             Axios.get('/product/',{ params : { slug : this.params }})
             .then(resp => {
                 this.setDataProduct(resp.data)
@@ -264,7 +278,7 @@ export default {
             .finally(()=>{
                 this.$store.dispatch('loading',false)
             })
-           
+             
     }
 }
 </script>

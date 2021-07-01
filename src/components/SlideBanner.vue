@@ -12,7 +12,7 @@
         <div class="wrapper" :style="{'marginLeft' : marginLeft + 'vw'}">
             <div class="item-slide" v-for="(slide, index) in slides" :key="index"
                ref="itemSlide">
-                <img :src="slide" alt="">
+                <img :src="slide" alt="" style="height: 450;">
             </div>
         </div>
     </div>
@@ -27,10 +27,10 @@ export default {
     data : function(){
         return {
             slides : [
-                require('@/assets/slide-banner/slide-1.jpg'),
-                require('@/assets/slide-banner/slide-2.jpg'),
-                require('@/assets/slide-banner/slide-3.jpg'),
-                require('@/assets/slide-banner/slide-4.jpg'),
+                require('@/assets/slide-banner/slide-rev-1.jpg'),
+                require('@/assets/slide-banner/slide-rev-2.jpg'),
+                require('@/assets/slide-banner/slide-rev-3.jpg'),
+                require('@/assets/slide-banner/slide-rev-4.jpg'),
             ],
             marginLeft : 0,
             indexSlide : 0,

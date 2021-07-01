@@ -8,13 +8,17 @@ Vue.use(Vuex)
 
 export default new Vuex.Store({
   state: {
-    errorConn : false
+      errorConn : false
   },
   mutations: {
-   
+    errorConn : state => {
+          state.errorConn = true
+    }
   },
   getters: {
-   
+    getErrorConn : state => {
+      return state.errorConn
+    }
   },
   actions: {
     

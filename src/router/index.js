@@ -27,6 +27,7 @@ const routes = [
   {
     path : '/order',
     component : Order,
+    name : 'Order',
     meta    : {requiresAuth :true }
   
   }
@@ -55,16 +56,22 @@ const routes = [
     path        : '/register',
     component   : Register,
     name        : 'Register',
+    meta        : {
+      guest : true
+    }
    
   },
   {
     path        : '/login',
     component   : Login,
     name        : 'Login',
+    meta        : {
+      guest : true
+    }
   },
   // ============= User ================
   {
-    path        : '/me',
+    path        : '/me/:tab?',
     component   : Me,
     name        : 'Me',
     meta        : {
@@ -93,7 +100,15 @@ router.beforeEach((to,from,next)=>{
     }else{
       next()
     }
-    }else{
+    }else if(to.matched.some(record => record.meta.guest)){
+      if(store.getters.isLoggedIn){
+        next({
+          path : '/'
+        })
+      }else{
+        next()
+      }
+  }else{
     next()
   }
 })

@@ -19,14 +19,15 @@
        </div>
        <!-- ================= MYaccount ================ -->
        <div class="col col-8" id="my-account" v-if="sideActive == 'my-account'">
+         <form v-on:submit.prevent="submitForm">
            <div class="avatar mb-3">
-               <img :src="avatar" alt="">
-               <input type="file" v-on:change="avatarPreview">
+               <img :src="form.avatar" alt="">
+               <!-- <input type="file" v-on:change="avatarPreview">
                <span>Ukuran Gambar Maksimal : 1 MB</span>
                <span>Format Foto : .JPEG , .PNG</span>
                <span v-if="errors.avatar" class="error">
                    {{ errors.avatar.avatar[0] }}
-               </span>
+               </span> -->
            </div>
            <div v-if="errors.form">
                <span v-for="(error,index) in errors.form" :key="index">
@@ -34,7 +35,7 @@
                </span>
            </div>
         <div class="form-floating mb-3">
-            <input type="text" class="form-control" id="name" placeholder="name@example.com" v-model="form.name">
+            <input type="text" class="form-control" id="name" placeholder="name@example.com" v-model="form.name" required>
             <label for="name">Name</label>
         </div>
         <div class="form-floating mb-3">
@@ -46,8 +47,9 @@
             <textarea class="form-control" id="exampleFormControlTextarea1" rows="3"></textarea>
         </div>
         <div class="mb-3 text-center">
-            <button class="btn btn-primary save" v-on:click="submitForm">Save <span><i class="far fa-save"></i></span></button>
+            <button class="btn btn-primary save" type="submit">Save <span><i class="far fa-save"></i></span></button>
         </div>
+        </form>
        </div>
        <!-- ====================== NOTIFIKASI ======================== -->
        <div id="notifikasi" class="col col-8" v-if="sideActive == 'notifikasi'">
@@ -57,21 +59,81 @@
            </div>
        </div>
        <!-- =================== mY ORDER ================================= -->
-       <div id="my-order" class="col col-8" v-if="sideActive == 'my-order'">
-           <div class="my-order-empty" v-if="!myOrder">
+       <div id="my-order" class="col col-9" v-if="sideActive == 'my-order'">
+           <div class="my-order-empty" v-if="orders == 0 ">
              <span><i class="far fa-list-alt"></i></span>
              <p>Belum ada pesanan</p>
            </div>
+            <div v-else class="order-item">
+                <ul class="list-group">
+                    <li class="list-group-item" v-for="(order,index) in orders" :key="index">
+                        <section class="item-show">
+                              <div class="date-order">
+                            <span class="date-order">
+                            {{ setDateOrder(order.created_at) }}
+                        </span>
+                        </div>
+                        <div>
+                            <span class="">
+                             {{ order.product_name }}
+                            </span>
+                        </div>
+                        <div class="detail">
+                            <span class="badge bg-warning text-dark">
+                                {{order.status}}
+                            </span>
+                            <button type="button" class="btn btn-info btn-sm ms-3" data-bs-toggle="collapse" :data-bs-target="'#collapseOrder'+index" aria-expanded="false" aria-controls="collapseExample">
+                               Details
+                            </button>
+                        </div>
+                        </section>
+                        <div class="collapse mt-2" :id="'collapseOrder'+index">
+                            <div class="card card-body order-detail">
+                                <section class="image">
+                                    <img :src="order.color.images[0].links" alt="">
+                                </section>
+                                <section class="description">
+                                    <table class="table">
+                                        <tbody>
+                                            <tr>
+                                                <th scope="row">Price</th>
+                                                <td>Rp {{ new Intl.NumberFormat('ID').format(order.price) }} ( {{order.ram_storage }} )</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Color</th>
+                                                <td>{{ order.color.color_name }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Installments</th>
+                                                <td>{{ order.tenor }} x Rp {{ new Intl.NumberFormat('ID').format(order.angsuran) }}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Client Name</th>
+                                                <td>{{order.order_name}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Telepon</th>
+                                                <td>{{order.telepon}}</td>
+                                            </tr>
+                                            <tr>
+                                                <th scope="row">Address</th>
+                                                <td>{{order.address}}</td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </section>
+                            </div>
+                        </div>
+                    </li>
+                </ul>
+            </div>
        </div>
-       <router-view></router-view>
     </div>
 </template>
 <script>
-import axios from 'axios'
 export default {
     data : function(){
         return{
-            user : '',
             avatar : '',
             form : {
                 name : '',
@@ -79,6 +141,7 @@ export default {
                 telepon : '',
                 address : ''
             },
+            orders : [],
             sideActive : 'my-account',
             notifikasi : '',
             myOrder    : '',
@@ -89,70 +152,65 @@ export default {
         }
     },
     methods : {
-        setForm : function(user){
+        setForm : function(user=Object){
             this.form.name =  user.name
+            this.form.avatar = user.avatar
             this.form.telepon = user.telepon
             this.form.address   = user.address
         } ,
-        avatarPreview : function(event){
-            let self    = this; 
-            let reader  = new FileReader()
-            reader.onload = function(){
-                self.avatar = reader.result
-            }
-            reader.readAsDataURL(event.target.files[0]);
-            this.form.avatar = event.target.files[0]
-        },
+        // avatarPreview : function(event){
+        //     let self    = this; 
+        //     let reader  = new FileReader()
+        //     reader.onload = function(){
+        //         self.avatar = reader.result
+        //     }
+        //     reader.readAsDataURL(event.target.files[0]);
+        //     this.form.avatar = event.target.files[0]
+        // },
         changeSide(side){
             this.sideActive = side
         },
         submitForm(){
-         if(this.form.avatar){
-            this.updateAvatar()  
-         }else{
-             this.updateUser();
-         }
-       
+           this.$store.dispatch('updateUser',this.form).finally(()=>{
+                  const user = this.$store.getters.user 
+                  this.setForm(user)
+             })   
         },
-        async updateAvatar(){
-             this.$store.dispatch('loading',true)
-            let formData = new FormData();
-            formData.append('avatar',this.form.avatar);
-            const response = await axios.post('/user/avatar',formData,{
-                headers : {'Content-Type': 'multipart/form-data'}
-            }).catch(error =>{
-                    const errors = error.response.data.errors
-                    this.errors.avatar = errors
-            }).finally(()=>{
-                 this.$store.dispatch('loading',false)
-            })
-            this.user.avatar = response.data.user.avatar
-            this.$store.dispatch('login',response.data.user)
-        },
-        async updateUser(){
-                this.$store.dispatch('loading',true)
-               const response = await axios.put('/user',this.form)
-                    .catch(error =>{
-                         const errors = error.response.data.errors
-                        this.errors.avatar = errors
-                    }).finally(()=>{
-                         this.$store.dispatch('loading',false)
-                    })
-                    this.setForm(response.data.user)   
+        setDateOrder : function(dateOrder){
+            const newDate = new Date(dateOrder);
+            const year = newDate.getFullYear();
+            const month = newDate.getMonth();
+            const date = newDate.getDate();
+            return `${year}/${month}/${date}`;
+              
         }
+        // async updateAvatar(){
+        //      this.$store.dispatch('loading',true)
+        //     let formData = new FormData();
+        //     formData.append('avatar',this.form.avatar);
+        //     const response = await axios.post('/user/avatar',formData,{
+        //         headers : {'Content-Type': 'multipart/form-data'}
+        //     }).catch(error =>{
+        //             const errors = error.response.data.errors
+        //             this.errors.avatar = errors
+        //     }).finally(()=>{
+        //          this.$store.dispatch('loading',false)
+        //     })
+        //     this.user.avatar = response.data.user.avatar
+        //     this.$store.dispatch('login',response.data.user)
+        // },
 
     },
     mounted(){
-        this.$store.dispatch('loading',true)
-        axios.get('/user')
-        .then(resp => {
-            this.user = resp.data.user
-            this.avatar = resp.data.user.avatar
-            this.setForm(resp.data.user)
+        this.$store.dispatch('user').finally(()=>{
+            const user = this.$store.getters.user 
+            this.setForm(user)
+            this.orders = user.order
         })
-        .finally(()=>{
-            this.$store.dispatch('loading',false)
-        })
+        if(this.$route.params.tab){
+            this.sideActive = this.$route.params.tab
+        }
+        
     }
 }
 </script>

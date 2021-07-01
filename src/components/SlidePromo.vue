@@ -106,6 +106,9 @@ export default {
         .then(resp =>{
         this.products = resp.data.products
         })
+        .catch(()=>{
+            this.$store.commit('errorConn')
+        })
         .finally(()=>{
         this.$store.dispatch('loading',false)
         this.setItems();

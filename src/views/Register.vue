@@ -45,7 +45,7 @@
                 <!-- ================ PASSWORD CONFIRMATION ================     -->
                 <div class="form-floating mb-3">
                     <input type="password" :class="['form-control',{'is-invalid' : error.password}]" id="floatingPassword" placeholder="Password Confirmation"
-                    v-model="form.password">
+                    v-model="form.passwordConfirmation">
                     <label for="floatingPassword">Password Confirmation</label>
                      <!-- error feedback email -->
                      <div class="invalid-feedback" v-if="error.password">

@@ -46,7 +46,7 @@
             <!-- search desktop -->
             <div class="on-desktop search-box" :class="{ active : searchStatus}">
                 <div class="search-bar">
-                     <input type="search" v-model="searchInput" placeholder="Cari Disini!!" autofocus required>
+                     <input type="search" v-model="searchInput" placeholder="Search here!!" autofocus required>
                 <span v-on:click="searchHandle"><i class="fas fa-search btn-search"></i></span>
                 </div> 
                 <div v-if="searchStatus">
@@ -62,8 +62,8 @@
                        {{ user.name }}
                     </button>
                     <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                        <li class="dropdown-item"><router-link to="me">Profile </router-link></li>
-                        <li class="dropdown-item" v-on:click="logout">Log Out</li>
+                        <router-link to="me" class="drop-item">Profile </router-link>
+                        <li v-on:click="logout" class="drop-item">Log Out</li>
                     </ul>
                     </div>
                 </div>
