@@ -5,29 +5,20 @@
                     <h2><span>SIGN IN</span></h2>  
             </div>
             <div class="form-area">
+                <div v-if="error" class="error mt-3 mb-3">
+                    {{ error }}
+                </div>
                  <!-- =============  EMAIL ================= -->
                 <div class="form-floating mb-3">
                     <input type="email" :class="['form-control',{'is-invalid' : error.email}]" id="floatingInput" placeholder="name@example.com" 
                     v-model="form.email">
                     <label for="floatingInput">Email address</label>
-                    <!-- error feedback email -->
-                     <div class="invalid-feedback" v-if="error.email">
-                        <p v-for="(error,index) in error.email" :key="index">
-                            {{ error }}
-                        </p>
-                    </div>
                 </div>
                 <!-- =============== PASSWORD ================== -->
                 <div class="form-floating mb-3">
                     <input type="password" :class="['form-control',{'is-invalid' : error.password}]" id="floatingPassword" placeholder="Password"
                     v-model="form.password">
                     <label for="floatingPassword">Password</label>
-                     <!-- error feedback password -->
-                     <div class="invalid-feedback" v-if="error.password">
-                        <p v-for="(error,index) in error.password" :key="index">
-                            {{ error }}
-                        </p>
-                    </div>
                 </div>
                 <div class="mb-3 text-center">
                     <button type="submit" class="btn btn-primary submit"
@@ -43,7 +34,6 @@
 </template>
 <script>
 // import Axios from 'axios'
-import {mapGetters} from 'vuex';
 export default {
     data : function(){
         return {
@@ -51,24 +41,21 @@ export default {
                 email       : '',
                 password    : ''
             },
-           
+            error : ''
+            
         }
-    },
-    computed : {
-        ...mapGetters({
-            error : 'loginError'
-        })
     },
     methods : {
         login : function(){
             let form  = this.form
-            this.$store.dispatch('login',form).catch(()=>{
-                this.form.password = ''
-               
+            this.$store.dispatch('login',form)
+            .then(()=>{
+                this.$router.push('/')
             })
-            .finally(()=>{
-                this.$router.push({name : 'Home'})
+            .catch(()=>{
+                this.error = 'There was a problem with your login'
             })
+        
         }
         //  async login() {
         //      this.$store.dispatch('loading',true)

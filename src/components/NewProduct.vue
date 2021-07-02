@@ -1,7 +1,8 @@
 <template>
     <div id="new-product">
-        <section class="mb-3">
+        <section class="mb-3 title">
             <h2>New Product</h2>
+             <router-link to="/products">See all products ></router-link>
         </section>
         <section class="new-product-wrapper">
             <div v-for="(product,index) in products" :key="index" class="product-inner">
@@ -42,11 +43,12 @@ export default {
          this.$store.dispatch('loading',true)
     },  
     mounted(){
-        Axios.get('/products',{params : {take : 4}})
+        Axios.get('/products/take/4')
       .then(resp => {
         this.products = resp.data.products
       })
       .finally(()=>{
+          
           this.$store.dispatch('loading',false)
       })
     }

@@ -1,4 +1,12 @@
+@import '../variable.scss';
 #new-product{
+    .title{
+        display: flex;
+        justify-content: space-between;
+        a{
+            color: $kp-blue;
+        }
+    }
     margin: 40px 0;
     padding: 5%;
     .product-inner{

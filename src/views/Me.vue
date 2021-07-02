@@ -60,7 +60,7 @@
        </div>
        <!-- =================== mY ORDER ================================= -->
        <div id="my-order" class="col col-9" v-if="sideActive == 'my-order'">
-           <div class="my-order-empty" v-if="orders == 0 ">
+           <div class="my-order-empty" v-if="orders == 0">
              <span><i class="far fa-list-alt"></i></span>
              <p>Belum ada pesanan</p>
            </div>

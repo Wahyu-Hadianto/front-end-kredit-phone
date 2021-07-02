@@ -39,17 +39,17 @@
               <!-- ========= PRODCT PRICE ================ -->
               <section class="mb-4">
                    <div class="prices">
-                  <div v-for="(prices,index) in product.prices" :key="index">
-                      <div v-if="prices.id == form.konfigurasi_id" :class="['price-wrapper',{promo : prices.price_promo}]">
-                           <span v-if="prices.price_promo">
-                               Rp {{ new Intl.NumberFormat('ID').format(prices.price_promo) }}
+                    <div v-for="(prices,index) in product.prices" :key="index">
+                        <div v-if="prices.id == form.konfigurasi_id" :class="['price-wrapper',{promo : prices.price_promo}]">
+                            <span v-if="prices.price_promo">
+                                Rp {{ new Intl.NumberFormat('ID').format(prices.price_promo) }}
                             </span>
                             <span>
                                 Rp {{ new Intl.NumberFormat('ID').format(prices.price_normal) }}
                             </span>
-                            <input type="hidden" :value="prices.price_promo || prices.price_normal" id="price-selected">
-                      </div>
-                  </div>
+                                <input type="hidden" :value="prices.price_promo || prices.price_normal" id="price-selected">
+                        </div>
+                    </div>
               </div>
               </section>
              
@@ -271,7 +271,7 @@ export default {
             Axios.get('/tenor').then(resp => {
                 this.tenor = resp.data.tenor
             });
-            Axios.get('/product/',{ params : { slug : this.params }})
+            Axios.get('/product/slug/'+this.$route.params.slug)
             .then(resp => {
                 this.setDataProduct(resp.data)
             })

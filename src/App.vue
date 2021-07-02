@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <Loading></Loading>
-    <Navbar :logout="logout"></Navbar>
+    <Navbar></Navbar>
     <div class="content">
       <router-view/>
     </div>
@@ -25,15 +25,6 @@ export default {
           this.$store.dispatch('user')
       }
       
-    },
-    methods : {
-      logout : function(){
-         this.$store.dispatch('loading',true) 
-        this.$store.dispatch('logout').finally(()=>{
-           this.$store.dispatch('loading',false) 
-          this.$router.push('/')
-        })
-      }
     }
       
 }

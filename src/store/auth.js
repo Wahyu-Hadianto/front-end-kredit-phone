@@ -4,10 +4,7 @@ export default{
         return {
             token   : localStorage.getItem('token') || null,
             user    : { name :''},
-            error   : {
-                email       : null,
-                password    : null
-            }
+        
         }
     },
     mutations : {
@@ -17,10 +14,6 @@ export default{
         loggedOut(state){
             state.user    = null
             state.token   = ''
-        },
-        loginError(state,error){
-            state.error.email = error.email
-            state.error.password = error.password
         },
         token(state,token){
             state.token = token
@@ -36,22 +29,28 @@ export default{
         user      : state => {
           return state.user
         },
-        loginError     : state => {
-            return state.error;
-        }
     },
     actions :{
-        async login({commit},form){
-            const response = await axios.post('/login',form).catch(errors =>{
-                const error = errors.response.data.errors
-                commit('loginError',error)
+        login({commit},form){
+            return new Promise((resolve,reject) => {
+                this.dispatch('loading',true)
+                axios.post('/login',form)
+                .then(response => {
+                    const token = response.data.token
+                    const user  = response.data.user
+                    localStorage.setItem('token',token)
+                    commit('token',token)
+                    commit('user',user)
+                    resolve(response)
+                })
+                .catch((error)=>{
+                    localStorage.removeItem('token')
+                    reject(error)
+                })
+                .finally(()=>{
+                    this.dispatch('loading',false)
+                })
             })
-            const token = response.data.token
-            const user  = response.data.user
-            console.log(user)
-            localStorage.setItem('token',token)
-            commit('token',token)
-            commit('user',user)
 
         },
         async user({commit}){
@@ -61,12 +60,29 @@ export default{
                 commit('user',user)
                 this.dispatch('loading',false)
         },
-        async logout({commit}){
-            const response =  await axios.get('/logout')
-            if(response.status == 200){
-                localStorage.removeItem('token')
-                commit('loggedOut')
-            }
+        logout({commit}){
+            return new Promise((resolve,reject)=>{
+                this.dispatch('loading',true)
+                axios.post('/logout')
+                .then((response)=>{
+                    localStorage.removeItem('token')
+                    commit('loggedOut')
+                    resolve(response)
+                })
+                .catch((error)=>{
+                    reject(error)
+                })
+                .finally(()=>{
+                    this.dispatch('loading',false)
+                })
+            })
+            
+
+            // const response =  await axios.get('/logout')
+            // if(response.status == 200){
+            //     localStorage.removeItem('token')
+            //     commit('loggedOut')
+            
         },
         async updateUser({commit},form){
             this.dispatch('loading',true)

@@ -27,6 +27,13 @@
        justify-content: center;
        flex-direction: column;
        max-width: 500px;
+       .error{
+           background-color: $bg-error;
+           border: 1px solid $text-error;
+           color:$text-error;
+           text-align: center;
+           padding: 5px;
+       }
        .submit{
            width: 60%;
            font-size: x-large;

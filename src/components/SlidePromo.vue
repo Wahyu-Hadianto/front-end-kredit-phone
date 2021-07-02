@@ -101,7 +101,7 @@ export default {
     computed : {
          
     },
-    mounted(){
+    beforeCreate(){
           Axios.get('/products/promo')
         .then(resp =>{
         this.products = resp.data.products
@@ -115,9 +115,6 @@ export default {
         this.getWidthContainer();
         })
         
-    },
-    beforeCreate(){
-      
     }
    
 }

@@ -50,6 +50,9 @@
       .price-wrapper{
           font-size: x-large;
           font-weight: 500;
+          .countdown{
+              font-size: small;
+          }
       }
       .price-wrapper.promo{
           background-color: rgba(247, 147, 147, 0.205);
@@ -104,7 +107,7 @@
           }
       }
       .price-monthly{
-          font-size: xxx-large;
+          font-size: 2rem;
           padding: 0px 10px;
           color: red;
       }

@@ -76,7 +76,7 @@ export default{
     },
     actions : {
         async searchProducts({commit},param){
-            const response = await axios.get('/products',{params : {search : param}})
+            const response = await axios.get('/products/search/'+param)
             commit('setResultSearch',response.data)
         },
         async mereks({commit}){

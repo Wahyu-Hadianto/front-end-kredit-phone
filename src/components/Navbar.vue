@@ -80,9 +80,6 @@
 <script>
 import {mapGetters} from 'vuex'
 export default {
-    props : {
-        logout : Function
-    },
     data : ()=>{
         return {
             navStatus : false,
@@ -93,6 +90,7 @@ export default {
        
     },
     methods  :{
+        
         navToggle : function(){
             this.navStatus = !this.navStatus
         },
@@ -114,6 +112,12 @@ export default {
            }
             this.searchStatus = false;
             this.searchInput = '';
+        },
+        logout : function(){
+            this.$store.dispatch('logout')
+            .then(()=>{
+                this.$router.push('/')
+            })
         }
     },
     computed : {
