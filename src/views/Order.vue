@@ -85,7 +85,7 @@ export default {
        },
         submitForm(){
             this.$store.dispatch('loading',true)
-            axios.post('/user/order'+this.form)
+            axios.post('/user/order',this.form)
             .then(()=>{
                 this.$router.push({name : 'Me',params : {tab :'my-order'}})
             })

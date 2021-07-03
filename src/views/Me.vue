@@ -68,22 +68,22 @@
                 <ul class="list-group">
                     <li class="list-group-item" v-for="(order,index) in orders" :key="index">
                         <section class="item-show">
-                              <div class="date-order">
+                        <div class="date-order">
                             <span class="date-order">
                             {{ setDateOrder(order.created_at) }}
                         </span>
                         </div>
-                        <div>
-                            <span class="">
+                        <div class="product-name">
+                            <span >
                              {{ order.product_name }}
                             </span>
                         </div>
                         <div class="detail">
-                            <span class="badge bg-warning text-dark">
+                            <span class="status ms-1">
                                 {{order.status}}
                             </span>
-                            <button type="button" class="btn btn-info btn-sm ms-3" data-bs-toggle="collapse" :data-bs-target="'#collapseOrder'+index" aria-expanded="false" aria-controls="collapseExample">
-                               Details
+                            <button type="button" class="btn btn-info btn-sm ms-1" data-bs-toggle="collapse" :data-bs-target="'#collapseOrder'+index" aria-expanded="false" aria-controls="collapseExample">
+                               <i class="fas fa-chevron-down"></i>
                             </button>
                         </div>
                         </section>

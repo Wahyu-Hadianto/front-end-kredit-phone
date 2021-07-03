@@ -80,10 +80,30 @@
             .list-group{
                 width: 90%;
                 margin: 20px auto;
+                .product-name{
+                    overflow: hidden;
+                    white-space: nowrap;
+                }
                 .item-show{
                     display: flex;
                     justify-content: space-between;
+                    div{
+                        margin: 0px 3px;
+                    }
                    
+                }
+                .detail{
+                    .status{
+                        display: flex;
+                        background-color: $yellow;
+                        text-align: center;
+                        padding: 3px;
+                        align-items: center;
+                        border-radius: 4px;
+                     
+                    }
+                    display: inline-flex;
+                    flex-wrap: nowrap;
                 }
             }
             .order-detail{
@@ -141,6 +161,16 @@
             }
             #my-account,#notifikasi,#my-order{
                 width: 100%;
+            }
+            #my-order{
+                .order-item{
+                    .list-group{
+                        width: 100%;
+                        .list-group-item{
+                            padding: 0.5rem;
+                        }
+                    }
+                }
             }
            
         }
