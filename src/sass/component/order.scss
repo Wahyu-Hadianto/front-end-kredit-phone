@@ -80,7 +80,13 @@
     #order{
         width: 100%;
         .product-order{
+   
+            justify-content: space-between;
+            .description{
+                width: 70%;
+            }
             .image{
+                margin: 5px;
                 img{
                     width: 100px;
                 }

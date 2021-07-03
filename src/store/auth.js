@@ -53,12 +53,23 @@ export default{
             })
 
         },
-        async user({commit}){
+        user({commit}){
+            return new Promise((resolve,reject)=>{
                 this.dispatch('loading',true)
-                const response = await axios.get('/user')
-                const user = response.data.user
-                commit('user',user)
-                this.dispatch('loading',false)
+                axios.get('/user')
+                .then(response =>{
+                    const user = response.data.user
+                    commit('user',user)
+                    resolve(response)
+                })
+                .catch((error)=>{
+                    reject(error)
+                })
+                .finally(()=>{
+                    this.dispatch('loading',false)
+                })
+            })
+               
         },
         logout({commit}){
             return new Promise((resolve,reject)=>{

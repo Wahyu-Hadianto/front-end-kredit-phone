@@ -72,12 +72,25 @@ export default{
         sliceProducts(state,index){
             state.products =  state.productsBeforeShow.slice((index-1 ) * state.pagination.items , index * state.pagination.items)
             state.pagination.PageActive = index
-        }
+        },
+        // includesProducts(state,search){
+           
+        //     let result  = state.productsOrigin.filter( product =>{
+        //         return product.product_name.includes('realme')
+        //     })
+        //     console.log(result)
+        // }
     },
     actions : {
-        async searchProducts({commit},param){
-            const response = await axios.get('/products/search/'+param)
-            commit('setResultSearch',response.data)
+        searchProducts({commit},param){
+            this.dispatch('loading',true)
+            axios.get('/products/search/'+ param)
+            .then(response =>{
+                commit('setResultSearch',response.data)
+            })
+            .finally(()=>{
+                this.dispatch('loading',false)
+            })
         },
         async mereks({commit}){
             const response = await axios.get('/mereks')

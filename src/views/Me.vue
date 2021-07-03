@@ -202,8 +202,8 @@ export default {
 
     },
     mounted(){
-        this.$store.dispatch('user').finally(()=>{
-            const user = this.$store.getters.user 
+        this.$store.dispatch('user').then((response)=>{
+            const user = response.data.user 
             this.setForm(user)
             this.orders = user.order
         })

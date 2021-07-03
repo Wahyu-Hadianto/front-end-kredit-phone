@@ -83,18 +83,19 @@ export default {
            this.form.color_id   = product.color[0].id
            this.form.tenor      = product.tenor[0].id
        },
-       async submitForm(){
+        submitForm(){
             this.$store.dispatch('loading',true)
-           const response = await axios.post('/user/order',this.form)
-                            .catch(() => {
-                                this.error = true
-                            }).finally(()=>{
-                                this.$store.dispatch('loading',false)
-                            })
-                if(response.status == 201){
-                    this.$router.push({name : 'Me',params : {tab :'my-order'}})
-                }
-       }
+            axios.post('/user/order'+this.form)
+            .then(()=>{
+                this.$router.push({name : 'Me',params : {tab :'my-order'}})
+            })
+            .catch(()=>{
+                this.error = true
+                })
+            .finally(()=>{
+                this.$store.dispatch('loading',false)
+            })
+        }
     },
     computed : {
         ...mapGetters({
@@ -114,6 +115,7 @@ export default {
                 this.setForm(product,user)
             })
     }
+    
 }
 </script>
 <style lang="scss" scoped>

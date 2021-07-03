@@ -18,7 +18,7 @@
                 <router-link to="/products" >Product</router-link>
                 <a href="#">About Us</a>
                 <a href="#">Contact Us</a>
-                <div class="auth-mobile">
+                <div class="auth-mobile" v-if="!isLoggedIn">
                     <router-link to="/login">Login</router-link> |
                     <router-link to="/register">Register</router-link>
                 </div>
@@ -33,14 +33,24 @@
                 </div>
                 <!-- ==================== ME ============================ -->
                 <div class="me">
-                    <router-link to="/me" >
-                        <div v-if="isLoggedIn">         
-                            <img :src="user.avatar">
-                        </div>
-                        <div v-else>
+                    <router-link to="/me" v-if="!isLoggedIn">
+                        <div class="me-default">
                             <i class="far fa-user"></i>
                         </div>
                     </router-link>
+                    <div v-else>
+                        <div>
+                            <div class="dropdown">
+                                <button class="btn btn-outline-light" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                 <img :src="user.avatar">
+                                </button>
+                                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                        <router-link to="me" class="drop-item">Profile </router-link>
+                                        <li v-on:click="logout" class="drop-item">Log Out</li>
+                                    </ul>
+                            </div>         
+                        </div>
+                    </div>
                 </div>
             </div>
             <!-- search desktop -->
@@ -61,17 +71,16 @@
                     <button class="btn btn-outline-light dropdown-toggle text-dark" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
                        {{ user.name }}
                     </button>
-                    <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
-                        <router-link to="me" class="drop-item">Profile </router-link>
-                        <li v-on:click="logout" class="drop-item">Log Out</li>
-                    </ul>
+                        <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                            <router-link to="me" class="drop-item">Profile </router-link>
+                            <li v-on:click="logout" class="drop-item">Log Out</li>
+                        </ul>
                     </div>
                 </div>
                 <!-- ======= JIKA USER BELUM LOGIN -========= -->
                 <div v-else>
                     <router-link to="/login">Login</router-link> |
                     <router-link to="/register">Register</router-link>
-                    
                 </div>
             </div>
         </section>
@@ -102,21 +111,21 @@ export default {
             
         },
         searchHandle : function(){
-           if(this.$router.app._route.name != 'Products'){
-               this.$router.push('/products/' + this.searchInput)
-           }else{
-            this.$store.dispatch('loading',true) 
-               this.$store.dispatch('searchProducts',this.searchInput).finally(()=>{
-                    this.$store.dispatch('loading',false)  
-               })
-           }
-            this.searchStatus = false;
-            this.searchInput = '';
+            if(this.searchInput){
+                     if(this.$router.app._route.name != 'Products'){
+                            this.$router.push('/products/' + this.searchInput)
+                        }else{
+                        this.$store.dispatch('searchProducts',this.searchInput)
+                        }
+                        this.searchStatus = false;
+                        this.searchInput = '';
+            }
+          
         },
         logout : function(){
             this.$store.dispatch('logout')
             .then(()=>{
-                this.$router.push('/')
+                this.$router.push({name : 'Home'})
             })
         }
     },

@@ -102,6 +102,7 @@ export default {
          
     },
     beforeCreate(){
+         this.$store.dispatch('loading',true)
           Axios.get('/products/promo')
         .then(resp =>{
         this.products = resp.data.products

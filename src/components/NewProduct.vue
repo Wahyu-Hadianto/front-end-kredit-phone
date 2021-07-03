@@ -48,7 +48,6 @@ export default {
         this.products = resp.data.products
       })
       .finally(()=>{
-          
           this.$store.dispatch('loading',false)
       })
     }
