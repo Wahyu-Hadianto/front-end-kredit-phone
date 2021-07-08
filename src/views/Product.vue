@@ -271,7 +271,9 @@ export default {
             Axios.get('/tenor').then(resp => {
                 this.tenor = resp.data.tenor
             });
-            Axios.get('/product/slug/'+this.$route.params.slug)
+            Axios.get('/product',{params : {
+                slug : this.$route.params.slug
+            }})
             .then(resp => {
                 this.setDataProduct(resp.data)
             })

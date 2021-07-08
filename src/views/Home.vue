@@ -39,7 +39,7 @@ export default {
   },
   computed: {
         ...mapGetters({
-          errorConn : 'getErrorConn'
+          errorConn : 'getErrorConn',
           })
   },
   components: {

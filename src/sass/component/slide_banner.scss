@@ -1,3 +1,4 @@
+@import '../variable.scss';
 .slide-banner{ 
     display: flex;
     align-items: center;
@@ -15,8 +16,28 @@
                 width: 100%;
             }
         }
+       
     }  
 
+}
+// --------------  Control slide -------------------------
+.controls{
+    text-align: center;
+    padding: 15px 0;
+    .control-item{
+        display:inline-block;
+        height: 15px;
+        width: 15px;
+        background-color:$gray-500;
+        border-radius: 50%;
+        margin: 0px 5px;
+        transition: all 1s ease-in-out;
+        &.active{
+            background-color: $kp-blue;
+            width: 30px;
+            border-radius: 15px;
+        }
+    }
 }
   // ================ Navigasi SLider   ================== //
 
@@ -44,4 +65,18 @@
      font-size: 40px;
 
  }
+ // --------------  Control slide -------------------------
+.controls{
+   
+    .control-item{
+      
+        height: 10px;
+        width: 10px;
+        margin: 0px 2px;
+        &.active{
+            width: 20px;
+            border-radius: 10px;
+        }
+    }
+}
 }

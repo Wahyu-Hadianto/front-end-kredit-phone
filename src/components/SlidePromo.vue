@@ -1,5 +1,5 @@
 <template>
-    <div class="sale-container">
+        <div class="sale-container">
         <!-- ========== CONTROL SLIDE =========== -->
         <section class="slide-header">
             <div><h3>Crazy Sale</h3></div>
@@ -97,9 +97,6 @@ export default {
             this.styleWrapper.marginLeft = this.marginWrapper + 'px';
 
         }
-    },
-    computed : {
-         
     },
     beforeCreate(){
          this.$store.dispatch('loading',true)

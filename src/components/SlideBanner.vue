@@ -17,8 +17,12 @@
         </div>
     </div>
      <div class="controls">
-          
-        </div>
+          <div v-for="index in slides.length" 
+              :key="index" 
+              :class="['control-item',{active : index == indexSlide+1}]">
+
+          </div>
+    </div>
     </section>
     
 </template>
@@ -32,8 +36,9 @@ export default {
                 require('@/assets/slide-banner/slide-rev-3.jpg'),
                 require('@/assets/slide-banner/slide-rev-4.jpg'),
             ],
-            marginLeft : 0,
-            indexSlide : 0,
+            marginLeft  : 0,
+            indexSlide  : 0,
+            startPost   : 0,
             wrapper : document.querySelector('.wrapper'),
             itemSlide : document.querySelector('item-slide'),
             
@@ -41,7 +46,15 @@ export default {
         }
     },
     methods : {
-        nextSlide(){
+        touchStart : function(){
+            this.startPost = this.getPosition(event)
+            console.log(this.startPost)
+        },
+        getPosition : function(event){
+            return event.touches[0].clientX 
+        }  
+        ,
+        nextSlide : function(){
             if(this.indexSlide < this.slides.length -1){
                  this.marginLeft -= 100
                  this.indexSlide += 1
@@ -55,7 +68,22 @@ export default {
             }
            
         },
+        slideInterval(){
+            let self = this;
+            setInterval(function(){
+                    self.marginLeft -= 100
+                    self.indexSlide += 1
+                    if(self.indexSlide == self.slides.length ){
+                        self.indexSlide = 0
+                        self.marginLeft = 0
+                    }
+                   
+            },3000)
+        }
        
+    },
+    mounted(){
+        
     }
 
     
